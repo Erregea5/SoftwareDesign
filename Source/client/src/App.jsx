@@ -4,7 +4,7 @@ import History from "./routes/history/History";
 import Login from "./routes/login/Login";
 import Profile from "./routes/profile/Profile";
 import Quote from "./routes/quote/Quote";
-import Register from "./routes/register/Register";
+import Register from "./routes/register";
 
 const router = createBrowserRouter([
   {

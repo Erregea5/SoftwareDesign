@@ -1,0 +1,23 @@
+@media screen and (max-width: 1600px) {
+  #left {
+    flex-grow: 1;
+  }
+
+  #left #logo {
+    width: 60%;
+  }
+
+  #right {
+    flex-grow: 1;
+  }
+
+  div.centered {
+    width: min(44em, 90%);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  #left {
+    display: none;
+  }
+}
