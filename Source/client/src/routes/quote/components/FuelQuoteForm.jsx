@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import QuoteResult from "./QuoteResult";
-import "../CryptowalletStyles.css";
 
 const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
   const [gallonsRequested, setGallonsRequested] = useState("");

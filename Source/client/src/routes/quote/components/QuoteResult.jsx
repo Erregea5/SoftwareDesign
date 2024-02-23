@@ -1,5 +1,4 @@
 import React from "react";
-import "../CryptowalletStyles.css";
 
 const QuoteResult = ({ price, numGal }) => {
   return (
