@@ -55,7 +55,7 @@ body {
     padding: 8px 16px;
     border: none;
     border-radius: 8px;
-    background-color: #4CAF50;
+    background-color: purple;
     color: white;
     cursor: pointer;
     outline: none;
@@ -64,7 +64,24 @@ body {
 }
 
 .submit-button:hover {
-    background-color: #45a049;
+    background-color: #6a0dad;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: purple;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.back-button:hover {
+    background-color: #6a0dad;
+    /* Darker shade of purple on hover */
 }
 
 /* Additional Styles for Calendar */
