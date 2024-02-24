@@ -1,4 +1,4 @@
-import './table.css'
+import '../../css/history/table.css'
 
 function Navbar(){
   return <>
