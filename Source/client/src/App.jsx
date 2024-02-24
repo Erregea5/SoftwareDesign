@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import History from "./routes/history/History";
-import Login from "./routes/login/Login";
-import Profile from "./routes/profile/Profile";
-import Quote from "./routes/quote/Quote";
-import Register from "./routes/register/Register";
+import History from "./components/history/History";
+import Login from "./components/login/Login";
+import Profile from "./components/profile/Profile";
+import Quote from "./components/quote/Quote";
+import Register from "./components/register/Register";
 
 const router = createBrowserRouter([
   {
