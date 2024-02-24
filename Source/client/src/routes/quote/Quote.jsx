@@ -41,7 +41,6 @@ const Quote = () => {
   return (
     <div className="card-container">
       <div className="card">
-        <h1>Fuel Quote Form</h1>
         <FuelQuoteForm
           deliveryAddress="123 Main St, City, State, ZIP"
           handleSubmit={handleSubmit}

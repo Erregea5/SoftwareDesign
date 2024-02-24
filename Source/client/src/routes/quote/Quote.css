@@ -1,7 +1,6 @@
 /* Quote.css */
 body {
     font-family: 'Poppins', sans-serif;
-    /* Use the 'Poppins' font family */
 }
 
 .card-container {
@@ -10,7 +9,6 @@ body {
     align-items: center;
     height: 100vh;
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./components/background.jpg');
-    /* Use the provided background image URL */
     background-size: cover;
     background-position: center;
 }
@@ -20,13 +18,9 @@ body {
     padding: 20px;
     border-radius: 16px;
     backdrop-filter: blur(8px);
-    /* Apply blur effect */
     background: rgba(255, 255, 255, 0.15);
-    /* Transparent background */
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    /* Soft shadow */
     color: white;
-    /* Text color */
 }
 
 .form {
@@ -48,15 +42,12 @@ body {
     border: none;
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.1);
-    /* Transparent input background */
     color: white;
-    /* Text color */
     outline: none;
 }
 
 .input::placeholder {
     color: rgba(255, 255, 255, 0.5);
-    /* Placeholder text color */
 }
 
 .submit-button {
@@ -65,18 +56,107 @@ body {
     border: none;
     border-radius: 8px;
     background-color: #4CAF50;
-    /* Green color */
     color: white;
-    /* Text color */
     cursor: pointer;
     outline: none;
     transition: background-color 0.3s ease;
-    /* Smooth transition */
     font-family: 'Poppins', sans-serif;
-    /* Use the 'Poppins' font family */
 }
 
 .submit-button:hover {
     background-color: #45a049;
-    /* Darker green color on hover */
+}
+
+/* Additional Styles for Calendar */
+.calendar-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    /* Adjust the top margin as needed */
+}
+
+.react-datepicker-wrapper {
+    width: auto;
+    /* Remove the width constraint */
+}
+
+.react-datepicker {
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(255, 255, 255, 0);
+    /* Set the background color */
+    border: none;
+    border-radius: 16px;
+    /* Apply border-radius */
+    backdrop-filter: blur(8px);
+    /* Apply backdrop-filter for glassmorphism */
+    color: white;
+}
+
+.react-datepicker__input-container {
+    display: block;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background-color: transparent;
+    /* Set input background color to transparent */
+    color: white;
+    outline: none;
+}
+
+.react-datepicker__input-container input::placeholder {
+    color: rgba(255, 255, 255, 0);
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+    color: white;
+    /* Set day text color */
+}
+
+.react-datepicker__day:hover {
+    background-color: rgba(255, 255, 255, 0);
+    /* Apply hover background color */
+}
+
+.react-datepicker__current-month {
+    color: rgb(255, 255, 255);
+    /* Set month text color */
+}
+
+/* Additional Styles for Calendar Header */
+.react-datepicker__header {
+    background-color: transparent;
+    /* Set header background color to transparent */
+}
+
+.react-datepicker__header--custom {
+    background-color: transparent;
+    /* Set custom header background color to transparent */
+    border: none;
+    /* Remove border */
+}
+
+.react-datepicker__current-month,
+.react-datepicker__navigation {
+    color: white;
+    /* Set month and navigation text color */
+}
+
+.react-datepicker__navigation {
+    top: 10px;
+    /* Adjust the top position of navigation buttons */
+}
+
+.react-datepicker__navigation--next {
+    right: 10px;
+    /* Adjust the right position of next navigation button */
+}
+
+.react-datepicker__navigation--previous {
+    left: 10px;
+    /* Adjust the left position of previous navigation button */
 }

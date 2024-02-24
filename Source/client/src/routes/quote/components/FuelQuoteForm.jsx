@@ -1,84 +1,15 @@
-// import React, { useState } from "react";
-// import QuoteResult from "./QuoteResult";
-
-// const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
-//   const [gallonsRequested, setGallonsRequested] = useState("");
-//   const [deliveryDate, setDeliveryDate] = useState("");
-//   const [suggestedPrice, setSuggestedPrice] = useState(-1);
-//   const [formSubmitted, setFormSubmitted] = useState(false);
-
-//   // Function to handle form submission
-//   const handleFormSubmit = (e) => {
-//     e.preventDefault();
-//     if (gallonsRequested && deliveryDate) {
-//       handleSubmit(gallonsRequested, deliveryDate);
-//       // mock price --------------- change when pricing module is made!!!
-//       setSuggestedPrice(3 * gallonsRequested);
-//       setFormSubmitted(true);
-//     }
-//   };
-
-//   // Function to reset form fields
-//   const handleResetForm = () => {
-//     setGallonsRequested("");
-//     setDeliveryDate("");
-//     setSuggestedPrice(-1);
-//     setFormSubmitted(false);
-//   };
-
-//   return (
-//     <>
-//       {formSubmitted ? (
-//         <>
-//           <QuoteResult price={suggestedPrice} numGal={gallonsRequested} />
-//           <button onClick={handleResetForm}>Start Over</button>
-//         </>
-//       ) : (
-//         <form onSubmit={handleFormSubmit}>
-//           <label>
-//             Gallons Requested:
-//             <input
-//               type="number"
-//               value={gallonsRequested}
-//               onChange={(e) => setGallonsRequested(e.target.value)}
-//               required
-//             />
-//           </label>
-//           <br />
-//           <label>
-//             Delivery Address:
-//             <input type="text" value={deliveryAddress} readOnly />
-//           </label>
-//           <br />
-//           <label>
-//             Delivery Date:
-//             <input
-//               type="date"
-//               value={deliveryDate}
-//               onChange={(e) => setDeliveryDate(e.target.value)}
-//               required
-//             />
-//           </label>
-//           <br />
-//           <button type="submit">Get Quote</button>
-//         </form>
-//       )}
-//     </>
-//   );
-// };
-
-// export default FuelQuoteForm;
-
-// FuelQuoteForm.jsx
 import React, { useState } from "react";
+import DatePicker from "react-datepicker"; // Import the datepicker component
+import "react-datepicker/dist/react-datepicker.css"; // Import datepicker styles
 import QuoteResult from "./QuoteResult";
 import "../Quote.css";
 
 const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
   const [gallonsRequested, setGallonsRequested] = useState("");
-  const [deliveryDate, setDeliveryDate] = useState("");
+  const [deliveryDate, setDeliveryDate] = useState(new Date()); // Initialize deliveryDate state with current date
   const [suggestedPrice, setSuggestedPrice] = useState(-1);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false); // State to control visibility of the calendar
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -91,21 +22,19 @@ const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
 
   const handleResetForm = () => {
     setGallonsRequested("");
-    setDeliveryDate("");
+    setDeliveryDate(new Date()); // Reset deliveryDate to current date
     setSuggestedPrice(-1);
     setFormSubmitted(false);
   };
 
+  const toggleCalendar = () => {
+    setShowCalendar(!showCalendar); // Toggle the visibility of the calendar
+  };
+
   return (
     <>
-      {formSubmitted ? (
-        <div className="form-result">
-          <QuoteResult price={suggestedPrice} numGal={gallonsRequested} />
-          <button className="submit-button" onClick={handleResetForm}>
-            Start Over
-          </button>
-        </div>
-      ) : (
+      <h1>Fuel Quote Form</h1>
+      {!showCalendar && !formSubmitted && (
         <form onSubmit={handleFormSubmit} className="form">
           <div className="input-container">
             <label className="label">Gallons Requested:</label>
@@ -128,18 +57,38 @@ const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
           </div>
           <div className="input-container">
             <label className="label">Delivery Date:</label>
-            <input
-              type="date"
-              value={deliveryDate}
-              onChange={(e) => setDeliveryDate(e.target.value)}
-              required
-              className="input"
-            />
+            <button
+              className="input datepicker-toggle" // Apply input styles to the datepicker toggle button
+              onClick={toggleCalendar}
+            >
+              {deliveryDate.toLocaleDateString()}
+            </button>
           </div>
           <button type="submit" className="submit-button">
             Get Quote
           </button>
         </form>
+      )}
+      {showCalendar && (
+        <div className="calendar-container">
+          <DatePicker
+            selected={deliveryDate}
+            onChange={(date) => {
+              setDeliveryDate(date);
+              toggleCalendar(); // Hide the calendar after a date is selected
+            }}
+            className="datepicker"
+            inline
+          />
+        </div>
+      )}
+      {formSubmitted && (
+        <div className="form-result">
+          <QuoteResult price={suggestedPrice} numGal={gallonsRequested} />
+          <button className="submit-button" onClick={handleResetForm}>
+            Start Over
+          </button>
+        </div>
       )}
     </>
   );
