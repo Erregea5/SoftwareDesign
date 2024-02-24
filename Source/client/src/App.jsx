@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import "./css/shared/index.css";
 
 import History from "./components/history";
