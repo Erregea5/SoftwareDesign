@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Input from "./Input";
 
-import "../../css/register/register.css";
+import "../../css/shared/authentication-page.css";
 import logo1x from "../../images/shared/logo@1x.svg";
 import logo2x from "../../images/shared/logo@2x.svg";
 import world from "../../images/shared/world.png";
@@ -18,7 +18,7 @@ export default function AuthenticationPage({
 }) {
   const navigate = useNavigate();
   return (
-    <div className="container">
+    <div id="authentication-container">
       <section id="left">
         <Link to="/">
           <picture>

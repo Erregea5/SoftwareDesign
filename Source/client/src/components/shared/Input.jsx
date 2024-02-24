@@ -23,6 +23,7 @@ export default function Input({
         maxLength={maxLength}
         pattern={pattern}
         title={title}
+        autoComplete="off"
         required
       />
       <label htmlFor={name}>{label}</label>
