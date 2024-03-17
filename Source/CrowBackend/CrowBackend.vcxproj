@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Sebastian\source\repos\CrowBackend\dependencies\asio-1.28.1\include;C:\Users\Sebastian\source\repos\CrowBackend\dependencies\Crow-1.1.1-Darwin\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Sebastian\source\repos\CrowBackend\dependencies\asio\include;C:\Users\Sebastian\source\repos\CrowBackend\dependencies\Crow\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Sebastian\source\repos\CrowBackend\dependencies\asio-1.28.1\include;C:\Users\Sebastian\source\repos\CrowBackend\dependencies\Crow-1.1.1-Darwin\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Sebastian\source\repos\CrowBackend\dependencies\asio\include;C:\Users\Sebastian\source\repos\CrowBackend\dependencies\Crow\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
