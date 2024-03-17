@@ -1,0 +1,6 @@
+curl.exe -i -X GET http://localhost:18080/api/register/hi/hi 
+curl.exe -i -X GET http://localhost:18080/api/login/hi/hi
+curl.exe -i -X POST -H 'Content-Type: application/json' -d '{""clientLocation"": "1", ""clientHistory"": "1"}' http://localhost:18080/api/profileManagement/hi/hi
+curl.exe -i -X POST -H 'Content-Type: application/json' -d '{""companyProfitMargin"": "0", ""gallonsRequested"": "0"}' http://localhost:18080/api/predictRateOfFuel/hi/hi
+curl.exe -i -X GET http://localhost:18080/api/fullFillPurchase/hi/hi                                                                                             
+curl.exe -i -X GET http://localhost:18080/api/getFuelQuoteHistory/hi/hi                                                                                          
