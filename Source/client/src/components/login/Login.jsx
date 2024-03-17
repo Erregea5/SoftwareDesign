@@ -1,7 +1,5 @@
-import { Link } from "react-router-dom";
-import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
-
-import AuthenticationPage from "../shared/AuthenticationPage";
+import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import Authentication from "../shared/Authentication";
 
 const props = {
   heading: "Welcome Back",
@@ -32,19 +30,17 @@ const props = {
   promptFragment: (
     <span
       style={{ fontWeight: 600, cursor: "pointer" }}
-      onClick={() => alert("This hasn't been implemented yet.")}
+      onClick={() => alert("This feature hasn't been implemented yet.")}
     >
       Forgot password?
     </span>
   ),
   buttonText: "Login",
-  footerFragment: (
-    <>
-      Don't have an account? <Link to="/register">Sign up</Link>
-    </>
-  ),
+  footerText: "Don't have an account?",
+  footerActionText: "Sign up",
+  footerActionLink: "/register",
 };
 
 export default function Login() {
-  return <AuthenticationPage {...props} />;
+  return <Authentication {...props} />;
 }

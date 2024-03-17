@@ -1,7 +1,5 @@
-import { Link } from "react-router-dom";
-import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-
-import AuthenticationPage from "../shared/AuthenticationPage";
+import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+import Authentication from "../shared/Authentication";
 
 const props = {
   heading: "Client Registration",
@@ -55,14 +53,14 @@ const props = {
       By registering, you accept our{" "}
       <span
         style={{ fontWeight: 600, cursor: "pointer" }}
-        onClick={() => alert("This hasn't been implemented yet.")}
+        onClick={() => alert("This feature hasn't been implemented yet.")}
       >
         Terms of Use
       </span>
       &nbsp;and&nbsp;
       <span
         style={{ fontWeight: 600, cursor: "pointer" }}
-        onClick={() => alert("This hasn't been implemented yet.")}
+        onClick={() => alert("This feature hasn't been implemented yet.")}
       >
         Privacy Policy
       </span>
@@ -70,13 +68,11 @@ const props = {
     </>
   ),
   buttonText: "Register",
-  footerFragment: (
-    <>
-      Already have an account? <Link to="/login">Sign in</Link>
-    </>
-  ),
+  footerText: "Already have an account?",
+  footerActionText: "Sign in",
+  footerActionLink: "/login",
 };
 
 export default function Register() {
-  return <AuthenticationPage {...props} />;
+  return <Authentication {...props} />;
 }
