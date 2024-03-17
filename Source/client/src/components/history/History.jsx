@@ -28,19 +28,23 @@ export default function History() {
     dataColumns.push(prop);
 
   data.sort((a,b)=>a.date-b.date)
-  return <>
+
+  return <div className='table-page'>
   <Navbar/>
   <br/><br/><br/><br/>
   <section id="outer-table-container">
     <div id="inner-table-container">
-      <table>
-        <thead><tr key={-1}>{
-          dataColumns.map((prop,idx)=><th key={idx+'+'}>{prop+' '}</th>)
+      <table id='quote-table'>
+        <thead className='qthead'><tr className='qtr' key={-1}>{
+          dataColumns.map((prop,idx)=><th className='qth' key={idx+'+'}>{prop+' '}</th>)
         }</tr></thead>
-        <tbody>{
+        <tbody className='qtbody'>{
           data.map((val,idx) => <>
-            <tr key={idx}>{
-              dataColumns.map((prop,i)=><td className='searchable' key={idx+'-'+i}>{val[prop]}</td>)
+            <tr className='qtr' key={idx}>{
+              dataColumns.map((prop,i)=>
+                <td className='searchable' key={idx+'-'+i}>
+                  {val[prop]}
+                </td>)
             }</tr>
           </>)
         }</tbody>
@@ -48,5 +52,5 @@ export default function History() {
     </div>
   </section>
   <button id='buy-button'>Buy Most Recent</button>
-  </>;
+  </div>;
 }
