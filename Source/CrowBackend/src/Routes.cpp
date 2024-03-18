@@ -4,10 +4,16 @@
 
 namespace Routes { 
     const json login(const string& username, const string& password) {
-        return Client(username, password).toJson();
+        Client client(username, password);
+        if(client.loggedIn)
+            return client.toJson();
+        return {};
     }
-    const bool _register(const string& username, const string& password) {
-        return !(Client(username, password, false).loggedIn);
+    const json _register(const string& username, const string& password) {
+        Client client(username, password, false);
+        if (client.loggedIn)
+            return client.toJson();
+        return {};
     }
     const json profileManagement(const string& username, const string& password, const readJson& changes) {
         auto client = Client(username, password);

@@ -1,16 +1,17 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 import "./tailwind.css";
 import logo from "../shared/images/logos/logo-chromatic-white@1x.svg";
 const profilePicture = "https://www2.cs.uh.edu/~rsingh/rajsingh_pic.jpg";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: false },
+  { name: "Dashboard", href: "/", current: false },
   { name: "History", href: "#", current: true },
-  { name: "Profile", href: "#", current: false },
-  { name: "Quote", href: "#", current: false },
+  { name: "Profile", href: "/profile", current: false },
+  { name: "Quote", href: "/quote", current: false },
 ];
 
 function classNames(...classes) {
@@ -43,11 +44,10 @@ export default function NavBar() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {/* FIXME: change to <Link> tag */}
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
@@ -57,7 +57,7 @@ export default function NavBar() {
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

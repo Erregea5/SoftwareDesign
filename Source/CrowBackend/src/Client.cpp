@@ -5,18 +5,24 @@ Client::Client(const string& username, const string& password,bool loggingIn)
 	: username(username), password(password) 
 {
 	json client = database["Client"][username];
-	if (client.count("password") < 1 && !loggingIn) {//new client
-		id = stoi(database["ClientCurID"].dump());
-		database["ClientCurID"] = id + 1;
+	if (!loggingIn) {// registering new client
+		if (client.count("password") < 1) {
+			id = stoi(database["ClientCurID"].dump());
+			database["ClientCurID"] = id + 1;
 
-		clientHistory = ClientHistory::NEW_CUSTOMER;
-		clientLocation = ClientLocation::IN_STATE;
-		mostRecentFuelQuoteId = 0;
+			clientHistory = ClientHistory::NEW_CUSTOMER;
+			clientLocation = ClientLocation::IN_STATE;
+			mostRecentFuelQuoteId = 0;
 
-		updateDatabase();
+			updateDatabase();
+			loggedIn = true;
+			return;
+		}
 		loggedIn = false;
 		return;
 	}
+
+	//logging in
 	if (client["password"].getString() != password) {
 		loggedIn = false;
 		return;

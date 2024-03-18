@@ -1,0 +1,74 @@
+[
+  {
+    "cityState": "Houston, TX",
+    "zipCode": 77084,
+    "gallonsRequested": 4000,
+    "profitMargin": 37.4,
+    "unitRate": 2.49,
+    "requestDate": "March 12, 2024",
+    "requestTime": "10:32 PM",
+    "purchaseDate": "",
+    "purchaseTime": "-",
+    "status": "Pending"
+  },
+  {
+    "cityState": "Austin, TX",
+    "zipCode": 78704,
+    "gallonsRequested": 5300,
+    "profitMargin": 35.4,
+    "unitRate": 2.39,
+    "requestDate": "March 13, 2024",
+    "requestTime": "11:32 PM",
+    "purchaseDate": "",
+    "purchaseTime": "-",
+    "status": "Cancelled"
+  },
+  {
+    "cityState": "Dallas, TX",
+    "zipCode": 75201,
+    "gallonsRequested": 6750,
+    "profitMargin": 33.4,
+    "unitRate": 2.29,
+    "requestDate": "March 14, 2024",
+    "requestTime": "12:32 PM",
+    "purchaseDate": "March 16, 2024",
+    "purchaseTime": "1:57 PM",
+    "status": "Fulfilled"
+  },
+  {
+    "cityState": "San Antonio, TX",
+    "zipCode": 78205,
+    "gallonsRequested": 7200,
+    "profitMargin": 31.4,
+    "unitRate": 2.19,
+    "requestDate": "March 15, 2024",
+    "requestTime": "1:32 pm",
+    "purchaseDate": "",
+    "purchaseTime": "-",
+    "status": "Cancelled"
+  },
+  {
+    "cityState": "El Paso, TX",
+    "zipCode": 79901,
+    "gallonsRequested": 8100,
+    "profitMargin": 29.4,
+    "unitRate": 2.09,
+    "requestDate": "March 16, 2024",
+    "requestTime": "2:32 PM",
+    "purchaseDate": "",
+    "purchaseTime": "-",
+    "status": "Cancelled"
+  },
+  {
+    "cityState": "Fort Worth, TX",
+    "zipCode": 76102,
+    "gallonsRequested": 9000,
+    "profitMargin": 27.4,
+    "unitRate": 1.99,
+    "requestDate": "March 17, 2024",
+    "requestTime": "3:32 PM",
+    "purchaseDate": "March 17, 2024",
+    "purchaseTime": "4:46 PM",
+    "status": "Fulfilled"
+  }
+]

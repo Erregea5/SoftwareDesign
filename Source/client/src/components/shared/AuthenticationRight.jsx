@@ -13,13 +13,30 @@ export default function AuthenticationRight({
   footerActionText,
   footerActionLink,
 }) {
+  const navigate=useNavigate();
   return (
     <main id={styles.container}>
       <section id={styles.top}>
         <div id={styles.centered}>
           <h1 id={styles.heading}>{heading}</h1>
           <p id={styles.description}>{description}</p>
-          <form id={styles.form} onSubmit={handleSubmit(useNavigate())}>
+          <form id={styles.form} onSubmit={(e) => {
+            e.preventDefault();
+            const username=e.target.username.value;
+            const password=e.target.password.value;
+            //TODO: display buffering
+            handleSubmit(username,password).then(user=>{
+              console.log(user);
+              if(user.password){//successful
+                localStorage.setItem("username",username);
+                localStorage.setItem("password",password);
+                navigate("/profile")
+              }
+              else
+                //TODO: display failure
+                console.log("failed to login");
+            })
+          }}>
             {inputPropArray.map((inputProp, index) => (
               <Input key={index} {...inputProp} />
             ))}

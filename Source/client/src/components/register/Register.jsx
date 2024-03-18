@@ -1,19 +1,12 @@
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import Authentication from "../shared/Authentication";
+import { attemptRegister } from "../../communication";
 
 const props = {
   heading: "Client Registration",
   description:
     "We make it quick and easy for corporations to get most competitive rates in the industry. Register below to get your quote in less than five minutes!",
-  handleSubmit: (navigate) => {
-    return (e) => {
-      e.preventDefault();
-      console.log(e.target.username.value);
-      console.log(e.target.email.value);
-      console.log(e.target.password.value);
-      navigate("/profile");
-    };
-  },
+  handleSubmit: attemptRegister,
   inputPropArray: [
     {
       type: "text",

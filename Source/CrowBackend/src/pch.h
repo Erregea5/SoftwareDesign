@@ -1,5 +1,6 @@
 #pragma once
 #include <crow.h>
+#include <crow/middlewares/cors.h>
 using namespace std;
 
 typedef crow::json::wvalue json;
