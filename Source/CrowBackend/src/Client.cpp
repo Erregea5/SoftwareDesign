@@ -59,7 +59,11 @@ const bool Client::buyFuel()
 
 	auto now = time(0);
 	char timeChar[26] = { 0 };
+#ifdef WIN32
 	ctime_s(timeChar, 26, &now);
+#else
+	ctime_r(&now, timeChar);
+#endif 
 	database["FuelQuote"][mostRecentFuelQuoteId]["purchasedDate"]= string(timeChar);
 	return true;
 }

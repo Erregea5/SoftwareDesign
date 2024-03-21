@@ -44,3 +44,12 @@ call
 addCors(res)
 ```
 right after
+
+Also I added a function in crow/json.h
+copy 
+```cpp
+std::string getString(){
+  return s;
+}
+```
+in public of wvalue

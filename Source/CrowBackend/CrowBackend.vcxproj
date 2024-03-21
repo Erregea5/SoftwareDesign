@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>dependencies\asio\include;dependencies\Crow\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;dependencies\asio\include;dependencies\Crow\include;dependencies\catch2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -103,7 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>dependencies\asio\include;dependencies\Crow\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;dependencies\asio\include;dependencies\Crow\include;dependencies\catch2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>dependencies\asio\include;dependencies\Crow\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;dependencies\asio\include;dependencies\Crow\include;dependencies\catch2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>dependencies\asio\include;dependencies\Crow\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;dependencies\asio\include;dependencies\Crow\include;dependencies\catch2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,12 +147,14 @@
     <ClCompile Include="src\FuelQuote.cpp" />
     <ClCompile Include="src\Routes.cpp" />
     <ClCompile Include="src\server.cpp" />
+    <ClCompile Include="tests\test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Client.h" />
     <ClInclude Include="src\FuelQuote.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Routes.h" />
+    <ClInclude Include="src\server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

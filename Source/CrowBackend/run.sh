@@ -4,7 +4,7 @@ g++ -fdiagnostics-color=always \
     -o src/server.out \
     -Idependencies/asio/include \
     -Idependencies/Crow/include \
-    -lpthread # -lwsock32 -lws2_32
+    -lpthread
 
 # Mac:
 # sh ./src/server.out

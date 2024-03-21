@@ -57,7 +57,7 @@ function postData(url,data){
   }).then(res=>{
     console.log(res);
     return res.json();
-  });
+  },err=>console.log(err));
 }
 
 export {attemptLogin,attemptRegister,manageProfile,fullfillPurchase,getFuelQuoteHistory,predictRateOfFuel}

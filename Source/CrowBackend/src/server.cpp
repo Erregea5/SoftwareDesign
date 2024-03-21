@@ -1,11 +1,4 @@
-#include "Routes.h"
-#include "Client.h"
-#include "FuelQuote.h"
-
-#define MISSING_CREDENTIALS 400
-#define MISSING_DATA 400
-#define SUCCESS "success"
-#define FAILURE "failure"
+#include "server.h"
 
 json database = {
     {"ClientCurID",1},
@@ -14,29 +7,22 @@ json database = {
     {"Client",{}}
 };
 
-class Auth {
-public:
-    std::string username,
-        password;
-    readJson data;
-    bool empty = false;
-public:
-    Auth(const crow::request& req) {
-        cout << req.body << endl;
-        data = crow::json::load(req.body);
-        if (!data || 
-            !data["username"] || data["username"].t() != crow::json::type::String ||
-            !data["password"] || data["password"].t() != crow::json::type::String)
-            empty = true;
-        cout << data["username"].s() << ", " << data["password"].s() << endl;
-        username = data["username"].s();
-        password = data["password"].s();
+Auth::Auth(const crow::request& req) {
+    cout << req.body << endl;
+    data = crow::json::load(req.body);
+    if (!data ||
+        !data.has("username") || data["username"].t() != crow::json::type::String ||
+        !data.has("password") || data["password"].t() != crow::json::type::String) {
+        empty = true;
+        return;
     }
-};
+    cout << data["username"].s() << ", " << data["password"].s() << endl;
+    username = data["username"].s();
+    password = data["password"].s();
+}
 
-int main() {
-    crow::App<crow::CORSHandler> app;
 
+void setupServer(crow::App<crow::CORSHandler>& app) {
     CROW_ROUTE(app, "/api/login")
         .methods("POST"_method)(
             [](const crow::request& req) {
@@ -108,8 +94,13 @@ int main() {
                     ).dump()
                 );
             });
-
-    app.port(18080).multithreaded().run();
-
-	return 0;
 }
+
+#ifndef TEST
+int main() {
+    crow::App<crow::CORSHandler> app;
+    setupServer(app);
+    app.port(18080).run();
+    return 0;
+}
+#endif

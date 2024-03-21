@@ -29,7 +29,11 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
     rate = gallonsRequested * companyProfitMargin;
     auto now = time(0);
     char timeChar[26] = { 0 };
+#ifdef WIN32
     ctime_s(timeChar, 26, &now);
+#else
+    ctime_r(&now, timeChar);
+#endif 
     date = string(timeChar);
     purchasedDate = "null";
 

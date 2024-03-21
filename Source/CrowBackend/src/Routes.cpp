@@ -7,13 +7,13 @@ namespace Routes {
         Client client(username, password);
         if(client.loggedIn)
             return client.toJson();
-        return {};
+        return { {"error","incorrect password"} };
     }
     const json _register(const string& username, const string& password) {
         Client client(username, password, false);
         if (client.loggedIn)
             return client.toJson();
-        return {};
+        return { {"error","username already exists"} };
     }
     const json profileManagement(const string& username, const string& password, const readJson& changes) {
         auto client = Client(username, password);

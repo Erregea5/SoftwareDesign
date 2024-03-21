@@ -1,0 +1,2 @@
+g++.exe -D TEST -fdiagnostics-color=always -g tests\test.cpp src\server.cpp src\Client.cpp src\FuelQuote.cpp src\Routes.cpp -o tests\test.exe -Idependencies/catch2/include -Idependencies\asio\include -Idependencies\Crow\include -pthread -lwsock32 -lws2_32
+./src\test.exe
