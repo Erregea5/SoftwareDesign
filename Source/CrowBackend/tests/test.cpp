@@ -295,3 +295,33 @@ TEST_CASE("Predict Rate of Fuel - Incorrect/Missing Inputs") {
         // Add assertions for the error response, if applicable
     }
 }
+
+TEST_CASE("setupServer - /api/login route") {
+    setupServer(app);
+
+    crow::request req;
+    crow::response res;
+
+    SECTION("Login with valid credentials") {
+        req.url = "/api/login";
+        req.method = crow::HTTPMethod::POST;
+        req.body = json({{"password", "valid_pass"}, {"username", "valid_user"}}).dump();
+
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        // Add more assertions based on expected response data
+    }
+
+    SECTION("Login with missing credentials") {
+        req.url = "/api/login";
+        req.method = crow::HTTPMethod::POST;
+        // No body provided
+
+        app.handle_full(req, res);
+        REQUIRE(res.code == 400);
+        // Add assertions for the error response, if applicable
+    }
+
+    // Add more test cases as needed to cover different scenarios
+}
