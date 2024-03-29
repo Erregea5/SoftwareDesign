@@ -95,33 +95,71 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
                 return crow::response(Routes::getFuelQuoteHistory(auth.username, auth.password).dump());
             });
 
-    CROW_ROUTE(app, "/api/predictRateOfFuel")
-        .methods("POST"_method)(
-            [](const crow::request& req) {
-                Auth auth(req);
-                if (auth.empty)
-                    return crow::response(MISSING_CREDENTIALS);
+    // CROW_ROUTE(app, "/api/predictRateOfFuel")
+    //     .methods("POST"_method)(
+    //         [](const crow::request& req) {
+    //             Auth auth(req);
+    //             if (auth.empty)
+    //                 return crow::response(MISSING_CREDENTIALS);
 
-                auto gallonsRequested = auth.data["gallonsRequested"];
-                auto companyProfitMargin = auth.data["companyProfitMargin"];
-                if(!gallonsRequested||gallonsRequested.t()!=crow::json::type::Number||
-                    !companyProfitMargin||companyProfitMargin.t()!=crow::json::type::Number)
-                    return crow::response(MISSING_DATA);
+    //             auto gallonsRequested = auth.data["gallonsRequested"];
+    //             auto companyProfitMargin = auth.data["companyProfitMargin"];
+    //             if(!gallonsRequested||gallonsRequested.t()!=crow::json::type::Number||
+    //                 !companyProfitMargin||companyProfitMargin.t()!=crow::json::type::Number)
+    //                 return crow::response(MISSING_DATA);
                 
-                return crow::response(
-                    Routes::predictRateOfFuel(
-                        auth.username, auth.password, 
-                        gallonsRequested.d(), companyProfitMargin.d()
-                    ).dump()
-                );
-            });
+    //             return crow::response(
+    //                 Routes::predictRateOfFuel(
+    //                     auth.username, auth.password, 
+    //                     gallonsRequested.d(), companyProfitMargin.d()
+    //                 ).dump()
+    //             );
+    //         });
+
+    CROW_ROUTE(app, "/api/predictRateOfFuel")
+    .methods("POST"_method)(
+        [](const crow::request& req) {
+            Auth auth(req);
+            if (auth.empty || auth.password.empty())
+                return crow::response(400, MISSING_CREDENTIALS);
+
+            auto gallonsRequested = auth.data["gallonsRequested"];
+            auto companyProfitMargin = auth.data["companyProfitMargin"];
+
+            if (!gallonsRequested || gallonsRequested.t() != crow::json::type::Number ||
+                !companyProfitMargin || companyProfitMargin.t() != crow::json::type::Number) {
+                return crow::response(400, MISSING_DATA);
+            }
+
+            // Check if gallonsRequested is a valid positive number
+            double gallons = gallonsRequested.d();
+            if (gallons <= 0) {
+                return crow::response(400, MISSING_DATA);
+            }
+
+            // Check if companyProfitMargin is a valid positive number
+            double profitMargin = companyProfitMargin.d();
+            if (profitMargin <= 0) {
+                return crow::response(400, MISSING_DATA);
+            }
+
+            return crow::response(
+                Routes::predictRateOfFuel(
+                    auth.username, auth.password,
+                    gallons, profitMargin
+                ).dump()
+            );
+        });
+
+
+
 }
 
-#ifndef TEST
-int main() {
-    crow::App<crow::CORSHandler> app;
-    setupServer(app);
-    app.port(18080).run();
-    return 0;
-}
-#endif
+// #ifndef TEST
+// int main() {
+//     crow::App<crow::CORSHandler> app;
+//     setupServer(app);
+//     app.port(18080).run();
+//     return 0;
+// }
+// #endif

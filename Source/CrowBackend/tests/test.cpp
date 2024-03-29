@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "..\src\server.h"
-#include <catch.hpp>
+#include "../src/server.h"
+#include <catch2/catch.hpp>
 
 crow::App<crow::CORSHandler> app;
 
@@ -61,8 +61,13 @@ TEST_CASE("profile management test"){
     crow::response res;
     req.url = "/api/profileManagement";
     req.method = crow::HTTPMethod::POST;
-    req.body = json({{"password","pass"},{"username","user"},{"changes",{"Full Name","test tester"}}}).dump();
-
+req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"Full Name", "test tester"}
+    }}
+}).dump();
     SECTION("attempt profile update without password") {
         req.body = json({ {"username","user"},{"fullname","test tester"} }).dump();
         app.handle_full(req, res);
@@ -86,7 +91,13 @@ TEST_CASE("profile management test"){
     }
 
     SECTION("profile update changing nonexistent field"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"age","21"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"age", "21"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -102,7 +113,13 @@ TEST_CASE("profile management test"){
     }
     
     SECTION("profile update invalid long name"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"Full Name","123456789012345678901234567890123456789012345678901"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"Full Name", "123456789012345678901234567890123456789012345678901"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -110,7 +127,13 @@ TEST_CASE("profile management test"){
     }
 
     SECTION("profile update invalid address 1 too long"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"Address 1","123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"Address 1", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -118,7 +141,13 @@ TEST_CASE("profile management test"){
     }
 
     SECTION("profile update invalid address 2 too long"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"Address 2","123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"Address 2", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -126,7 +155,13 @@ TEST_CASE("profile management test"){
     }
 
     SECTION("profile update invalid city too long"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"City","123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"City", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -134,7 +169,13 @@ TEST_CASE("profile management test"){
     }
 
     SECTION("profile update invalid incorrect state name"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"State","BK"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"State", "BK"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -142,7 +183,13 @@ TEST_CASE("profile management test"){
     }
 
     SECTION("profile update invalid zipcode"){
-        req.body = json({{"password","pass"},{"username","user"},{"changes",{"Zipcode","1234567"}}}).dump();
+        req.body = json({
+    {"password", "pass"},
+    {"username", "user"},
+    {"changes", {
+        {"Zipcode", "1234567"}
+    }}
+}).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -186,5 +233,65 @@ TEST_CASE("Get Fuel Quote History") {
         req.method = crow::HTTPMethod::GET;
         app.handle_full(req, res);
         REQUIRE(res.code == 405);
+    }
+}
+
+TEST_CASE("Predict Rate of Fuel - Incorrect/Missing Inputs") {
+    crow::request req;
+    crow::response res;
+
+    req.url = "/api/predictRateOfFuel";
+    req.method = crow::HTTPMethod::POST;
+
+    SECTION("Missing Username") {
+        req.body = json({
+            {"password", "hi"},
+            {"companyProfitMargin", "0.1"},
+            {"gallonsRequested", "100"}
+        }).dump();
+
+        app.handle_full(req, res);
+        REQUIRE(res.code == 400); // Assuming a proper status code for missing inputs
+        // Add assertions for the error response, if applicable
+    }
+
+    SECTION("Missing Password") {
+        req.body = json({
+            {"username", "hi"},
+            {"companyProfitMargin", "0.1"},
+            {"gallonsRequested", "100"}
+        }).dump();
+
+        app.handle_full(req, res);
+        REQUIRE(res.code == 400);
+        // Add assertions for the error response, if applicable
+    }
+
+    // Add more sections for other missing/incorrect inputs, such as companyProfitMargin, gallonsRequested, etc.
+    
+    SECTION("Invalid Company Profit Margin") {
+        req.body = json({
+            {"username", "hi"},
+            {"password", "hi"},
+            {"companyProfitMargin", "invalid_value"}, // Invalid value for companyProfitMargin
+            {"gallonsRequested", "100"}
+        }).dump();
+
+        app.handle_full(req, res);
+        REQUIRE(res.code == 400);
+        // Add assertions for the error response, if applicable
+    }
+
+    SECTION("Invalid Gallons Requested") {
+        req.body = json({
+            {"username", "hi"},
+            {"password", "hi"},
+            {"companyProfitMargin", "0.1"},
+            {"gallonsRequested", "invalid_value"} // Invalid value for gallonsRequested
+        }).dump();
+
+        app.handle_full(req, res);
+        REQUIRE(res.code == 400);
+        // Add assertions for the error response, if applicable
     }
 }
