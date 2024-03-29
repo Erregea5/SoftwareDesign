@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#include "server.h"
+#include "..\src\server.h"
 #include <catch.hpp>
 
 crow::App<crow::CORSHandler> app;
