@@ -8,7 +8,7 @@ export default function Nav() {
     <header id={styles.container}>
       <Link to="/">
         <picture>
-          <source media="(max-width: 820px)" srcset={logo1x} />
+          <source media="(max-width: 820px)" srcSet={logo1x} />
           <img id={styles.logo} src={logo3x} alt="Logo" />
         </picture>
       </Link>
@@ -16,14 +16,14 @@ export default function Nav() {
         <Link to="/" className={styles.link}>
           Home
         </Link>
-        <Link to="/history" className={styles.link}>
-          History
+        <Link to="#" className={styles.link}>
+          About
         </Link>
-        <Link to="/profile" className={styles.link}>
-          Profile
+        <Link to="#" className={styles.link}>
+          Pricing
         </Link>
-        <Link to="/quote" className={styles.link}>
-          Quote
+        <Link to="#" className={styles.link}>
+          More
         </Link>
       </nav>
       <nav id={styles.desktopButtons}>

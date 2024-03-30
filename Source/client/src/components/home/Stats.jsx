@@ -38,6 +38,28 @@ const useUpdateStats = (intervals, delayMs) => {
     },
   ]);
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (statIndex < stats.length) {
+  //       setStats((prevStats) => {
+  //         const stat = prevStats[statIndex];
+  //         if (stat.current < stat.max) {
+  //           stat.current = Math.min(
+  //             stat.current + stat.max / intervals,
+  //             stat.max
+  //           );
+  //         } else {
+  //           setStatIndex((prevIndex) => prevIndex + 1);
+  //         }
+  //         return [...prevStats];
+  //       });
+  //     } else {
+  //       clearInterval(interval);
+  //     }
+  //   }, delayMs);
+  //   return () => clearInterval(interval);
+  // });
+
   const [render, setRender] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {

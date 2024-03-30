@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Input.module.scss";
 
 export default function Input({
+  containerClassName,
+  className,
   type,
   name,
   label,
@@ -10,14 +12,15 @@ export default function Input({
   pattern,
   title,
   icon,
+  required = true,
 }) {
   return (
-    <div id={styles.container}>
-      <span id={styles.iconContainer}>
+    <div className={`${styles.container} ${containerClassName}`}>
+      <span className={styles.iconContainer}>
         <FontAwesomeIcon icon={icon} />
       </span>
       <input
-        id={styles.input}
+        className={`${styles.input} ${className}`}
         type={type}
         name={name}
         placeholder=" " // Required for floating label effect
@@ -26,9 +29,9 @@ export default function Input({
         pattern={pattern}
         title={title}
         autoComplete="off"
-        required
+        required={required}
       />
-      <label id={styles.label} htmlFor={name}>
+      <label className={styles.label} htmlFor={name}>
         {label}
       </label>
     </div>

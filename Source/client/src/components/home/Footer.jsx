@@ -13,8 +13,8 @@ export default function Footer({ categories, repoLink }) {
           <img id={styles.logo} src={logo3x} alt="Logo" />
         </Link>
         <p id={styles.paragraph}>
-          &copy; {new Date().getFullYear()} PetroVexa Induestries. Give us a
-          star on{" "}
+          &copy; {new Date().getFullYear()} PetroVexa Industries. Give us a star
+          on{" "}
           <Link id={styles.github} to={repoLink} target="_blank">
             GitHub
           </Link>
