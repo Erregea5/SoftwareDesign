@@ -296,9 +296,7 @@ TEST_CASE("Predict Rate of Fuel - Incorrect/Missing Inputs") {
     }
 }
 
-TEST_CASE("setupServer - /api/login route") {
-    setupServer(app);
-
+TEST_CASE("login - /api/login route") {
     crow::request req;
     crow::response res;
 
