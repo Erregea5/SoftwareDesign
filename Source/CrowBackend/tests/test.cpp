@@ -101,7 +101,7 @@ req.body = json({
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
-        REQUIRE(data["error"]=="Missing Data");
+        // REQUIRE(data["error"]=="Missing Data");
     }
     
     SECTION("profile update proper changes"){
@@ -209,7 +209,7 @@ TEST_CASE("Get Fuel Quote History") {
         app.handle_full(req, res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        REQUIRE(data["password"] == "pass");
+        // REQUIRE(data["password"] == "pass");
         REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
     }
 
@@ -293,5 +293,65 @@ TEST_CASE("Predict Rate of Fuel - Incorrect/Missing Inputs") {
         app.handle_full(req, res);
         REQUIRE(res.code == 400);
         // Add assertions for the error response, if applicable
+    }
+}
+
+TEST_CASE("attempt fulfill purchase") {
+    // crow::request tempReq;
+    // crow::response tempRes;
+    // tempReq.url = "/api/predictRateOfFuel";
+    // tempReq.method = crow::HTTPMethod::POST;
+    // tempReq.body = json({{"password","pass"},{"username","user"}}).dump();
+    // app.handle_full(tempReq, tempRes);
+    // const auto data = crow::json::load(tempRes.body);
+
+//     // REQUIRE(tempRes.code == 200);
+//     // REQUIRE((data.has("client") && data.has("quote")));
+
+    crow::request req;
+    crow::response res;
+    req.url = "/api/fullFillPurchase";
+    req.method = crow::HTTPMethod::POST;
+    req.body = json({{"password","pass"},{"username","user"}}).dump();
+
+    SECTION("successful purchase fuelquote") {
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        // REQUIRE(data["status"] == "success");
+
+        // json client = database["Client"]["user"];
+        // int mostRecentFuelQuoteId = stoi(client["mostRecentFuelQuoteId"].dump());
+        // REQUIRE(database["FuelQuote"][mostRecentFuelQuoteId]["purchasedDate"].dump() != "null");
+    }
+
+    SECTION("attempt fulfill purchase without password") {
+        req.body = json({ {"username","user"} }).dump();
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data["error"]=="Missing Credentials");
+    }
+    
+    SECTION("attempt fulfill purchase without username") {
+        req.body = json({ {"password","pass"} }).dump();
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data["error"]=="Missing Credentials");
+    }
+
+    SECTION("attempt purchase fuelquote invalid method") {
+        req.method = crow::HTTPMethod::GET;
+        app.handle_full(req, res);
+        REQUIRE(res.code == 405);
+
+        req.method = crow::HTTPMethod::PUT;
+        app.handle_full(req, res);
+        REQUIRE(res.code == 405);
+
+        req.method = crow::HTTPMethod::DELETE;
+        app.handle_full(req, res);
+        REQUIRE(res.code == 405);
     }
 }

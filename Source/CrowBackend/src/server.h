@@ -5,8 +5,8 @@
 #define MISSING_CREDENTIALS json{ {"error","Missing Credentials"} }
 #define MISSING_DATA json{ {"error","Missing Data"} }
 #define INPUT_MISMATCH json{{"error", "Input Mismatch"}}
-#define SUCCESS "success"
-#define FAILURE "failure"
+#define SUCCESS json{{"status", "success"}}
+#define FAILURE json{{"status", "failure"}}
 
 class Auth {
 public:
