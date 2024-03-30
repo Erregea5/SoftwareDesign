@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -6,6 +6,7 @@ import {
   faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./History.module.scss";
+import { getFuelQuoteHistory } from "../../communication";
 
 import NavBar from "./NavBar";
 
@@ -74,14 +75,19 @@ function Row({
 }
 
 export default function History() {
+  const [data,setData]=useState([]);
+  
   useEffect(() => {
+    getFuelQuoteHistory()
+      .then(val=>{
+        if(val&&val.length)
+          setData(val);
+      })
     document.body.style.backgroundColor = "#08141a";
     return () => {
       document.body.style.backgroundColor = "";
     };
   }, []);
-
-  const data = require("./mockData.json");
 
   return (
     <>
