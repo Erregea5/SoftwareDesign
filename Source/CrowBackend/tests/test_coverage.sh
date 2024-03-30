@@ -14,7 +14,9 @@ crow=$(getAbsolute "../dependencies/Crow/include")
 asio=$(getAbsolute "../dependencies/asio/include")
 
 # Compile and link
-g++ -D TEST -fdiagnostics-color=always -fprofile-arcs -ftest-coverage -g test.cpp ../src/server.cpp ../src/Client.cpp ../src/FuelQuote.cpp ../src/Routes.cpp -o test.exe -I"$catch" -I"$asio" -I"$crow" -pthread -lwsock32 -lws2_32
+g++ -D TEST -fdiagnostics-color=always \
+    -std=c++2a \
+    -fprofile-arcs -ftest-coverage -g test.cpp ../src/server.cpp ../src/Client.cpp ../src/FuelQuote.cpp ../src/Routes.cpp -o test.exe -I"$catch" -I"$asio" -I"$crow" -lpthread
 
 # Execute the compiled program
 ./test.exe
@@ -22,7 +24,7 @@ g++ -D TEST -fdiagnostics-color=always -fprofile-arcs -ftest-coverage -g test.cp
 # List of files to iterate over
 list="Client FuelQuote Routes server test"
 for b in $list; do
-    for a in $(gcov test.cpp -r -n -o test-"$b"); do
+    for a in $(gcov test.cpp -r -n -o "$b"); do
         echo "$a"
     done
 done
