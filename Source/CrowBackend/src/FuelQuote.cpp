@@ -1,33 +1,31 @@
-#include "FuelQuote.h"
-#include "Client.h"
+#include "Database.h"
 #include <iomanip>
 
 FuelQuote::FuelQuote(unsigned int _id)
     :id(_id)
 {
-    json quote = database["FuelQuote"][id];
-    if (quote.count("clientId") < 1)
+    auto rows = vector<FuelQuote>{};//database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
+    if (rows.size()==0)
         return;
-    clientId = stoi(quote["clientId"].dump());
-    clientLocation = ClientLocation(stoi(quote["clientLocation"].dump()));
-    gallonsRequested = stof(quote["gallonsRequested"].dump());
-    companyProfitMargin = stof(quote["companyProfitMargin"].dump());
-    rate = stof(quote["rate"].dump());
-    date = quote["date"].getString();
-    purchasedDate = quote["purchasedDate"].getString();
+    clientId = rows[0].clientId;
+    clientLocation = ClientLocation(rows[0].clientLocation);
+    gallonsRequested = rows[0].gallonsRequested;
+    companyProfitMargin = rows[0].companyProfitMargin;
+    rate = rows[0].rate;
+    date = rows[0].date;
+    purchasedDate = rows[0].purchasedDate;
 }
 
 FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const double _companyProfitMargin)
 	:clientId(client.id),clientLocation(client.clientLocation),
     gallonsRequested(_gallonsRequested), companyProfitMargin(_companyProfitMargin)
 {
-	id = stoi(database["FuelQuoteCurID"].dump());
-	database["FuelQuoteCurID"] = id + 1;
+    id = 0;//database.insert(*this);
     client.mostRecentFuelQuoteId = id;
     client.updateDatabase();
 
     rate = gallonsRequested * companyProfitMargin;
-    auto now = time(0);
+    auto now = std::time(0);
     char timeChar[26] = { 0 };
 #ifdef WIN32
     ctime_s(timeChar, 26, &now);
@@ -42,7 +40,7 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
 
 const void FuelQuote::updateDatabase()
 {
-    database["FuelQuote"][id] = json(toJson());
+    //database.update(*this);
 }
 
 const json FuelQuote::toJson()

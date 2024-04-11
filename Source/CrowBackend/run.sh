@@ -1,6 +1,6 @@
 g++ -fdiagnostics-color=always \
     -std=c++2a \
-    -g src/server.cpp src/Client.cpp src/FuelQuote.cpp src/Routes.cpp \
+    -g src/server.cpp src/Client.cpp src/FuelQuote.cpp src/Routes.cpp dependencies\sqlite3\include\sqlite3.c\
     -o server.out \
     -Idependencies/asio/include \
     -Idependencies/Crow/include \

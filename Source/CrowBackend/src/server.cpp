@@ -1,11 +1,7 @@
+#include "Database.h"
 #include "server.h"
 
-json database = {
-    {"ClientCurID",1},
-    {"FuelQuoteCurID",1},
-    {"FuelQuote",{}},
-    {"Client",{}}
-};
+Storage database = makeDatabase();
 
 vector<string> states ={
     "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
@@ -24,7 +20,6 @@ Auth::Auth(const crow::request& req) {
     username = data["username"].s();
     password = data["password"].s();
 }
-
 
 void setupServer(crow::App<crow::CORSHandler>& app) {
     CROW_ROUTE(app, "/api/login")

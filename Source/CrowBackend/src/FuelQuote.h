@@ -7,7 +7,7 @@ class FuelQuote {
 public:
     unsigned id;       // Primary key
     unsigned clientId; // Foreign key "pointing" to a `Client` object
-    ClientLocation clientLocation;
+    int clientLocation;
     double gallonsRequested;
     double companyProfitMargin;
     double rate;
@@ -15,6 +15,7 @@ public:
     string purchasedDate; // NULL if not purchased
 
 public:
+    FuelQuote() {}                                              // Will populate the rest of the fields by querying;
     FuelQuote(const unsigned _id);                                               // Will populate the rest of the fields by querying;
     FuelQuote(Client& client, const double _gallonsRequested, const double _companyProfitMargin); // Calculate rate, set `date` to `time(NULL)`
     const void updateDatabase();

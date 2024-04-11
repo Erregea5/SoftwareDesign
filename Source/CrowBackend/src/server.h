@@ -1,3 +1,4 @@
+#pragma once
 #include "Routes.h"
 #include "Client.h"
 #include "FuelQuote.h"
@@ -18,4 +19,5 @@ public:
     Auth(const crow::request& req);
 };
 
+void setupDatabase();
 void setupServer(crow::App<crow::CORSHandler>& app);

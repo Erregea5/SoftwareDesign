@@ -1,4 +1,4 @@
-download asio and Crow source and place it inside an include folder for each
+download asio, Crow, Catch2, sqlite3, and sqlite3_orm include source and place include folder in dependencies for each
 ```c
 -Crow
   |
@@ -11,11 +11,7 @@ download asio and Crow source and place it inside an include folder for each
 ```
 
 To run use CrowBackend.sln or run.cmd on Windows
-IDK for linux/macOs :P
-you'll probably just need to replace
--pthread -lwsock32 -lws2_32
-with your platform libraries
-
+and run.sh for linux and MaxOs
 
 Theres a cors related bug in crow LOL.
 To fix you have to go to dependencies\Crow\include\crow\routing.h 

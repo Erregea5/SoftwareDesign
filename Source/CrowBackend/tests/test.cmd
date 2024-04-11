@@ -1,2 +1,2 @@
-g++.exe -D TEST -fdiagnostics-color=always -g test.cpp ..\src\server.cpp ..\src\Client.cpp ..\src\FuelQuote.cpp ..\src\Routes.cpp -o test.exe -I..\dependencies\catch2\include -I..\dependencies\asio\include -I..\dependencies\Crow\include -pthread -lwsock32 -lws2_32
-./test.exe
+g++.exe -D TEST -fdiagnostics-color=always -g test.cpp ..\src\server.cpp ..\src\Client.cpp ..\src\FuelQuote.cpp ..\src\Routes.cpp ..\dependencies\sqlite3\include\sqlite3.c -o test.exe -I..\dependencies\catch2\include -I..\dependencies\asio\include -I..\dependencies\Crow\include -pthread -lwsock32 -lws2_32
+call test.exe

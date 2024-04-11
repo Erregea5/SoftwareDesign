@@ -17,19 +17,18 @@ namespace Routes {
     }
     const json profileManagement(const string& username, const string& password, const readJson& changes) {
         auto client = Client(username, password);
-        json clientJson = client.toJson();
         auto keys = changes.keys();
         cout << "keys: ";
-        for (auto& key : keys) {
-            if(key=="clientLocation"||key=="clientHistory") 
-                clientJson[key] = changes[key].i();
+        for (auto& key : keys) {//find way to do it without looping
+            if(key=="clientHistory") 
+                client.clientHistory = ClientHistory(changes[key].i());
+            else if(key == "clientLocation")
+                client.clientLocation = ClientLocation(changes[key].i());
             else if(key=="password")
-                clientJson[key] = changes[key].s();
+                client.password = string(changes[key].s());
         }
-        cout <<clientJson.dump() << endl;
-        
-        client.updateDatabase(clientJson);
-        return clientJson;
+        client.updateDatabase();
+        return client.toJson();
     }
     const json predictRateOfFuel(const string& username, const string& password, const double gallonsRequested, const double companyProfitMargin) {
         auto client = Client(username, password);

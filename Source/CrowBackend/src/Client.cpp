@@ -1,20 +1,15 @@
-#include "Client.h"
-#include "FuelQuote.h"
+#include "Database.h"
 
 Client::Client(const string& username, const string& password,bool loggingIn)
 	: username(username), password(password) 
 {
-	json client = database["Client"][username];
+	auto rows = std::vector<Client>{};//database.get_all<Client>(where(c(&Client::username) == username));
 	if (!loggingIn) {// registering new client
-		if (client.count("password") < 1) {
-			id = stoi(database["ClientCurID"].dump());
-			database["ClientCurID"] = id + 1;
-
+		if (rows.size()==0) {
 			clientHistory = ClientHistory::NEW_CUSTOMER;
 			clientLocation = ClientLocation::IN_STATE;
 			mostRecentFuelQuoteId = 0;
-
-			updateDatabase();
+			id = 0;//database.insert(*this);
 			loggedIn = true;
 			return;
 		}
@@ -23,19 +18,16 @@ Client::Client(const string& username, const string& password,bool loggingIn)
 	}
 
 	//logging in
-	if (client["password"].getString() != password) {
+	if (rows.size() == 0||rows[0].password != password) {
 		loggedIn = false;
 		return;
 	}
 
 	loggedIn = true;
-	id = ClientLocation(stoi(client["id"].dump()));
-	cout << client["clientLocation"].dump() << endl;
-	clientLocation = stoi(client["clientLocation"].dump()) == 0 ?
-		ClientLocation::IN_STATE : ClientLocation::OUT_OF_STATE;
-	clientHistory = stoi(client["clientHistory"].dump()) == 0 ?
-		ClientHistory::EXISTING_CUSTOMER : ClientHistory::NEW_CUSTOMER;
-	mostRecentFuelQuoteId = stoi(client["mostRecentFuelQuoteId"].dump());
+	id = rows[0].id;
+	clientLocation = rows[0].clientLocation;
+	clientHistory = rows[0].clientHistory;
+	mostRecentFuelQuoteId = rows[0].mostRecentFuelQuoteId;
 }
 
 const void Client::addFuelQuote(const double rate, const time_t date)
@@ -57,42 +49,32 @@ const bool Client::buyFuel()
 	if (!loggedIn || mostRecentFuelQuoteId == 0)
 		return false;
 
-	auto now = time(0);
+	auto now = std::time(0);
 	char timeChar[26] = { 0 };
 #ifdef WIN32
 	ctime_s(timeChar, 26, &now);
 #else
 	ctime_r(&now, timeChar);
 #endif 
-	database["FuelQuote"][mostRecentFuelQuoteId]["purchasedDate"]= string(timeChar);
+	//database.update_all(
+		//sqlite_orm::set(c(&FuelQuote::purchasedDate) = timeChar),
+		//where(c(&FuelQuote::id) == mostRecentFuelQuoteId)
+	//);
 	return true;
 }
 
 vector<FuelQuote> Client::getFuelQuoteHistory() const
 {
-	vector<FuelQuote> history;
 	if (!loggedIn)
-		return history;
-	int numQuotes = stoi(database["FuelQuoteCurID"].dump());
-	for (int i = 1;i < numQuotes;i++)
-		if (stoi(database["FuelQuote"][i]["clientId"].dump()) == id)
-			history.push_back(FuelQuote(i));
-
-	return history;
+		return {};
+	return {};//database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
 }
 
 const void Client::updateDatabase()
 {
 	if (!loggedIn)
 		return;
-	database["Client"][username] = json(toJson());
-}
-
-const void Client::updateDatabase(const json& newData)
-{
-	if (!loggedIn)
-		return;
-	database["Client"][username] = json(newData);
+	database.update(*this);
 }
 
 const json Client::toJson()
@@ -100,8 +82,8 @@ const json Client::toJson()
 	return {
 		{"id",id},
 		{"password",password},
-		{"clientLocation",clientLocation==ClientLocation::IN_STATE?0:1},
-		{"clientHistory",clientHistory==ClientHistory::EXISTING_CUSTOMER?0:1},
+		{"clientLocation",clientLocation},
+		{"clientHistory",clientHistory},
 		{"mostRecentFuelQuoteId",mostRecentFuelQuoteId}
 	};
 }
