@@ -1,9 +1,6 @@
 #ifndef ________________________________________________
 #define ________________________________________________
-
-#include "pch.h"
-
-class Client;
+#include "Client.h"
 
 class FuelQuote {
 public:
@@ -13,8 +10,8 @@ public:
     double gallonsRequested;
     double companyProfitMargin;
     double rate;
-    string date;
-    string purchasedDate; // NULL if not purchased
+    std::string date;
+    std::string purchasedDate; // NULL if not purchased
 
 public:
     FuelQuote() {}                                              // Will populate the rest of the fields by querying;

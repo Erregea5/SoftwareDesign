@@ -1,26 +1,29 @@
 #ifndef Client___
 #define Client___
-#include "pch.h"
-
+#include <string>
+#include <vector>
+//class json;
 class FuelQuote;
-
+enum change {
+    password,clientLocation,clientHistory,mostRecentFuelQuoteId
+};
 class Client {
 public:
     unsigned id;
-    string username;
-    string password;
+    std::string username;
+    std::string password;
     int clientLocation;
     int clientHistory;
     unsigned mostRecentFuelQuoteId; // Foreign key "pointing" to a `FuelQuote`'s `id`
     bool loggedIn;
 public:
     Client() {}
-    Client(const string& username, const string& password, bool loggingIn=true); // Will populate the rest of the fields by querying
+    Client(const std::string& username, const std::string& password, bool loggingIn=true); // Will populate the rest of the fields by querying
     const void addFuelQuote(const double rate, const time_t date);
     const FuelQuote getMostRecentFuelQuote() const;
     const bool buyFuel(); // Purchase the FuelQuote with `id` = `mostRecentFuelQuoteId` and set `purchasedDate` to `time(NULL)`
-    vector<FuelQuote> getFuelQuoteHistory() const;
-    const void updateDatabase();
+    std::vector<FuelQuote> getFuelQuoteHistory() const;
+    const void updateDatabase(change change_);
     const json toJson();
 };
 #endif

@@ -1,3 +1,4 @@
+#include "pch.h"
 /*
 #define CATCH_CONFIG_MAIN
 #include "../src/server.h"

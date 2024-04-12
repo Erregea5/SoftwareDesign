@@ -3,8 +3,11 @@
 #define SQLITE_ENABLE_COLUMN_METADATA
 #include <crow.h>
 #include <crow/middlewares/cors.h>
-#include <sqlite3.h>
 #include <sqlite_orm.h>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <iostream>
 using namespace std;
 
 typedef crow::json::wvalue json;

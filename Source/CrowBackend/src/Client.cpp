@@ -1,17 +1,24 @@
+#include "pch.h"
 #include "Database.h"
 
 Client::Client(const string& username, const string& password,bool loggingIn)
-	: username(username), password(password) 
+	: username(username), password(password), id(0), clientHistory(0), clientLocation(0),mostRecentFuelQuoteId(0)
 {
 	auto rows = database.get_all<Client>(where(c(&Client::username) == username));
 	cout<<rows.size()<<username<<endl;
 	for(auto &g:rows)cout<<g.username<<endl;
 	if (!loggingIn) {// registering new client
 		if (rows.size()==0) {
-			clientHistory = ClientHistory::NEW_CUSTOMER;
-			clientLocation = ClientLocation::IN_STATE;
-			mostRecentFuelQuoteId = 0;
-			id = database.insert(*this);
+			database.insert(or_abort(),
+				into<Client>(),
+				columns(&Client::username,&Client::password),
+				values(make_tuple(username, password)));
+			rows = database.get_all<Client>(where(c(&Client::username) == username));
+			if (rows.size() == 0) {
+				loggedIn = false;
+				return;
+			}
+			id=rows[0].id;
 			loggedIn = true;
 			return;
 		}
@@ -58,10 +65,10 @@ const bool Client::buyFuel()
 #else
 	ctime_r(&now, timeChar);
 #endif 
-	//database.update_all(
-	//	sqlite_orm::set(c(&FuelQuote::purchasedDate) = timeChar),
-	//	where(c(&FuelQuote::id) == mostRecentFuelQuoteId)
-	//);
+	database.update_all(
+		sqlite_orm::set(c(&FuelQuote::purchasedDate) = string(timeChar)),
+		where(c(&FuelQuote::id) == mostRecentFuelQuoteId)
+	);
 	return true;
 }
 
@@ -72,11 +79,36 @@ vector<FuelQuote> Client::getFuelQuoteHistory() const
 	return database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
 }
 
-const void Client::updateDatabase()
+const void Client::updateDatabase(change change_)
 {
 	if (!loggedIn)
 		return;
-	database.update(*this);
+	switch (change_) {
+	case change::password:
+		database.update_all(
+			sqlite_orm::set(c(&Client::password) = password),
+			where(c(&Client::id) == id)
+		);
+		break;
+	case change::clientHistory:
+		database.update_all(
+			sqlite_orm::set(c(&Client::clientHistory) = clientHistory),
+			where(c(&Client::id) == id)
+		);
+		break;
+	case change::clientLocation:
+		database.update_all(
+			sqlite_orm::set(c(&Client::clientLocation) = clientLocation),
+			where(c(&Client::id) == id)
+		);
+		break;
+	case change::mostRecentFuelQuoteId:
+		database.update_all(
+			sqlite_orm::set(c(&Client::mostRecentFuelQuoteId) = mostRecentFuelQuoteId),
+			where(c(&Client::id) == id)
+		);
+		break;
+	}
 }
 
 const json Client::toJson()
