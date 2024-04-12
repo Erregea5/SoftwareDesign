@@ -3,13 +3,15 @@
 Client::Client(const string& username, const string& password,bool loggingIn)
 	: username(username), password(password) 
 {
-	auto rows = std::vector<Client>{};//database.get_all<Client>(where(c(&Client::username) == username));
+	auto rows = database.get_all<Client>(where(c(&Client::username) == username));
+	cout<<rows.size()<<username<<endl;
+	for(auto &g:rows)cout<<g.username<<endl;
 	if (!loggingIn) {// registering new client
 		if (rows.size()==0) {
 			clientHistory = ClientHistory::NEW_CUSTOMER;
 			clientLocation = ClientLocation::IN_STATE;
 			mostRecentFuelQuoteId = 0;
-			id = 0;//database.insert(*this);
+			id = database.insert(*this);
 			loggedIn = true;
 			return;
 		}
@@ -57,8 +59,8 @@ const bool Client::buyFuel()
 	ctime_r(&now, timeChar);
 #endif 
 	//database.update_all(
-		//sqlite_orm::set(c(&FuelQuote::purchasedDate) = timeChar),
-		//where(c(&FuelQuote::id) == mostRecentFuelQuoteId)
+	//	sqlite_orm::set(c(&FuelQuote::purchasedDate) = timeChar),
+	//	where(c(&FuelQuote::id) == mostRecentFuelQuoteId)
 	//);
 	return true;
 }
@@ -67,7 +69,7 @@ vector<FuelQuote> Client::getFuelQuoteHistory() const
 {
 	if (!loggedIn)
 		return {};
-	return {};//database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
+	return database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
 }
 
 const void Client::updateDatabase()

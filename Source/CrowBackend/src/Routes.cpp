@@ -10,9 +10,12 @@ namespace Routes {
         return { {"error","incorrect password"} };
     }
     const json _register(const string& username, const string& password) {
+        cout<<"sigma"<<endl;
         Client client(username, password, false);
+        cout<<"hi\n"<<endl;
         if (client.loggedIn)
             return client.toJson();
+        cout<<"bye\n"<<endl;
         return { {"error","username already exists"} };
     }
     const json profileManagement(const string& username, const string& password, const readJson& changes) {

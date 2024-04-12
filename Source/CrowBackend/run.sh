@@ -1,10 +1,17 @@
 g++ -fdiagnostics-color=always \
     -std=c++2a \
-    -g src/server.cpp src/Client.cpp src/FuelQuote.cpp src/Routes.cpp dependencies\sqlite3\include\sqlite3.c\
+    -g \
+        src/server.cpp \
+        src/Client.cpp \
+        src/FuelQuote.cpp \
+        src/Routes.cpp \
+        src/Database.cpp \
     -o server.out \
-    -Idependencies/asio/include \
-    -Idependencies/Crow/include \
-    -lpthread
+    -I dependencies/asio/include \
+    -I dependencies/Crow/include \
+    -I dependencies/sqlite_orm/include \
+    -lpthread -lsqlite3 \
+    -fpermissive
 
 # Mac:
 # sh ./server.out

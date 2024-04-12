@@ -4,7 +4,7 @@
 FuelQuote::FuelQuote(unsigned int _id)
     :id(_id)
 {
-    auto rows = vector<FuelQuote>{};//database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
+    auto rows = database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
     if (rows.size()==0)
         return;
     clientId = rows[0].clientId;
@@ -20,7 +20,7 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
 	:clientId(client.id),clientLocation(client.clientLocation),
     gallonsRequested(_gallonsRequested), companyProfitMargin(_companyProfitMargin)
 {
-    id = 0;//database.insert(*this);
+    id = database.insert(*this);
     client.mostRecentFuelQuoteId = id;
     client.updateDatabase();
 
@@ -40,7 +40,7 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
 
 const void FuelQuote::updateDatabase()
 {
-    //database.update(*this);
+    database.update(*this);
 }
 
 const json FuelQuote::toJson()

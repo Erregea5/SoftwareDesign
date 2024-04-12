@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _______________________________________________sebastiansucksforsure
+#define _______________________________________________sebastiansucksforsure
 #include "Routes.h"
 #include "Client.h"
 #include "FuelQuote.h"
@@ -21,3 +22,5 @@ public:
 
 void setupDatabase();
 void setupServer(crow::App<crow::CORSHandler>& app);
+
+#endif

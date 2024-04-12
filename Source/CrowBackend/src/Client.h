@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Client___
+#define Client___
 #include "pch.h"
 
 class FuelQuote;
@@ -22,3 +23,4 @@ public:
     const void updateDatabase();
     const json toJson();
 };
+#endif

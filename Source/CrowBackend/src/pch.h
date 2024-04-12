@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _______________________________________________1
+#define _______________________________________________1
 #define SQLITE_ENABLE_COLUMN_METADATA
 #include <crow.h>
 #include <crow/middlewares/cors.h>
@@ -17,3 +18,5 @@ enum ClientHistory {
     EXISTING_CUSTOMER=0,
     NEW_CUSTOMER=1,
 };
+
+#endif

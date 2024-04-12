@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ________________________________________________
+#define ________________________________________________
+
 #include "pch.h"
 
 class Client;
@@ -21,3 +23,5 @@ public:
     const void updateDatabase();
     const json toJson();
 };
+
+#endif

@@ -1,7 +1,7 @@
 #include "Database.h"
 #include "server.h"
 
-Storage database = makeDatabase();
+Storage database = make_Database();
 
 vector<string> states ={
     "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
@@ -35,6 +35,7 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
         .methods("POST"_method)(
             [](const crow::request& req) {
                 Auth auth(req);
+                cout<<(auth.empty?"sad":"happy")<<endl;
                 if (auth.empty)
                     return crow::response(MISSING_CREDENTIALS);
                 return crow::response(Routes::_register(auth.username, auth.password).dump());

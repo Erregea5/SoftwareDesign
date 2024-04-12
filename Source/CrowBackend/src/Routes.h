@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _______________________________________________sebastiansucks
+#define _______________________________________________sebastiansucks
 #include "pch.h"
 
 class Client;
@@ -11,3 +12,5 @@ namespace Routes { // All views are for external use (+ API)
     const bool fulfillPurchase(const string& username, const string& password);
     const json getFuelQuoteHistory(const string& username, const string& password);
 };
+
+#endif
