@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { faUserCircle, faLock } from "@fortawesome/free-solid-svg-icons";
 import { styles } from "../shared/AuthPageRight";
 import AuthPage from "../shared/AuthPage";
@@ -10,12 +10,22 @@ import { attemptLogin } from "../../communication";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
     const username = e.target.username.value;
     const password = e.target.password.value;
-    attemptLogin(username, password).then(() => setIsLoading(false));
+    attemptLogin(username, password)
+      .then((data) => {
+        if (data.error) alert(data.error);
+        else {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
+          navigate("/profile");
+        }
+      })
+      .then(() => setIsLoading(false));
   };
   const form = (
     <form className={styles.form} onSubmit={handleSubmit}>

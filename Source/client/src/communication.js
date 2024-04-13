@@ -1,11 +1,11 @@
-const serverUrl = "http://localhost:18080/api/";
+const serverUrl = "http://localhost:18080/api/"; // Make this an environment variable later
 
 function attemptLogin(username, password) {
-  return postData('login',{username,password})
+  return postData("login", { username, password });
 }
 
 function attemptRegister(username, password) {
-  return postData('register',{username,password})
+  return postData("register", { username, password });
 }
 
 function manageProfile(changes) {
@@ -30,12 +30,12 @@ function getFuelQuoteHistory() {
   });
 }
 
-function predictRateOfFuel(gallonsRequested, companyProfitMargins) {
+function predictRateOfFuel(gallonsRequested, companyProfitMargin) {
   return postData("predictRateOfFuel", {
     username: localStorage["username"],
     password: localStorage["password"],
     gallonsRequested,
-    companyProfitMargins,
+    companyProfitMargin,
   });
 }
 
@@ -49,7 +49,7 @@ function postData(url, data) {
     body: JSON.stringify(data),
   }).then(
     (res) => {
-      console.log(res);
+      // console.log(res);
       return res.json();
     },
     (err) => console.log(err)

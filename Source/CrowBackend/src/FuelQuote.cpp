@@ -16,6 +16,27 @@ FuelQuote::FuelQuote(unsigned int _id)
     purchasedDate = rows[0].purchasedDate;
 }
 
+double calculateRate(int location, int clientHistory, double gallons)  {
+    const double currentPricePerGallon = 1.5; // Constant price per gallon
+    const double locationFactor = location == 1 ? 0.02 : 0.04; // Assuming Texas is 1, others are 0
+    const double rateHistoryFactor = clientHistory; // No history factor in C++
+    const double gallonsRequestedFactor = gallons > 1000 ? 0.02 : 0.03;
+    const double companyProfitFactor = 0.1;
+
+    // Calculate the margin
+    const double margin =
+        (locationFactor -
+            rateHistoryFactor +
+            gallonsRequestedFactor +
+            companyProfitFactor) *
+        currentPricePerGallon;
+
+    // Calculate the suggested price per gallon
+    const double suggestedPricePerGallon = currentPricePerGallon + margin;
+
+    return gallons * suggestedPricePerGallon;
+}
+
 FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const double _companyProfitMargin)
 	:clientId(client.id),clientLocation(client.clientLocation),
     gallonsRequested(_gallonsRequested), companyProfitMargin(_companyProfitMargin)
@@ -23,8 +44,8 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
     id = database.insert(*this);
     client.mostRecentFuelQuoteId = id;
     client.updateDatabase(change::mostRecentFuelQuoteId);
-
-    rate = gallonsRequested * companyProfitMargin;
+    int clientHistory=database.get_all<FuelQuote>(where(c(&FuelQuote::clientId) == client.id)).size()>0?1:0;
+    rate = calculateRate(clientLocation, clientHistory, gallonsRequested);
     auto now = std::time(0);
     char timeChar[26] = { 0 };
 #ifdef WIN32

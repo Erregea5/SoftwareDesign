@@ -76,7 +76,7 @@ vector<FuelQuote> Client::getFuelQuoteHistory() const
 {
 	if (!loggedIn)
 		return {};
-	return database.get_all<FuelQuote>(where(c(&FuelQuote::id) == id));
+	return database.get_all<FuelQuote>(where(c(&FuelQuote::clientId) == id));
 }
 
 const void Client::updateDatabase(change change_)
