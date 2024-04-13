@@ -13,3 +13,62 @@ curl -i -X POST -H 'Content-Type: application/json' -d '{"username": "hi", "pass
 curl -i -X POST -H 'Content-Type: application/json' -d '{"username": "hi", "password": "hi", "companyProfitMargin": "1", "gallonsRequested": "1"}' http://localhost:18080/api/predictRateOfFuel
 curl -i -X POST -H 'Content-Type: application/json' -d '{"username": "hi", "password": "hi"}' http://localhost:18080/api/fullFillPurchase
 curl -i -X POST -H 'Content-Type: application/json' -d '{"username": "hi", "password": "hi"}' http://localhost:18080/api/getFuelQuoteHistory
+
+better linux:
+
+```bash
+BASE_URL="http://localhost:18080/api"
+
+post() {
+    curl "$BASE_URL$1" \
+        -i -X POST \
+        --header 'Content-Type: application/json' \
+        --data "$2"
+}
+
+post '/register' \
+    '{
+        "username": "hi",
+        "password": "hi"
+    }'
+
+post '/login' \
+    '{
+        "username": "hi",
+        "password": "hi"
+    }'
+
+post '/profileManagement' \
+    '{
+        "username": "hi",
+        "password": "hi",
+        "changes": {
+            "Full Name": "Hello World",
+            "Address 1": "123 Main St",
+            "Address 2": "Nothing",
+            "City": "Houston",
+            "State": "UT",
+            "Zipcode": "5"
+        }
+    }'
+
+post '/predictRateOfFuel' \
+    '{
+        "username": "hi",
+        "password": "hi",
+        "gallonsRequested": 1,
+        "companyProfitMargin": 1
+    }'
+
+post '/fullFillPurchase' \
+    '{
+        "username": "hi",
+        "password": "hi"
+    }'
+
+post '/getFuelQuoteHistory' \
+    '{
+        "username": "hi",
+        "password": "hi"
+    }'
+```

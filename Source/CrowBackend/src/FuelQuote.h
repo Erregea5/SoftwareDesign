@@ -19,6 +19,7 @@ public:
     FuelQuote(Client& client, const double _gallonsRequested, const double _companyProfitMargin); // Calculate rate, set `date` to `time(NULL)`
     const void updateDatabase();
     const json toJson();
+    const double calculateRate(int location, double gallons);
 };
 
 #endif

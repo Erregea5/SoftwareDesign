@@ -5,18 +5,21 @@
 
 namespace Routes { 
     const json login(const string& username, const string& password) {
+        if(username ==""||username==NULL ||password==""||password==NULL){
+            return { {"error","missing username/password"} };
+        }
         Client client(username, password);
         if(client.loggedIn)
             return client.toJson();
         return { {"error","incorrect password"} };
     }
     const json _register(const string& username, const string& password) {
-        cout<<"sigma"<<endl;
+        //cout<<"sigma"<<endl;
         Client client(username, password, false);
-        cout<<"hi\n"<<endl;
+        //cout<<"hi\n"<<endl;
         if (client.loggedIn)
             return client.toJson();
-        cout<<"bye\n"<<endl;
+        //cout<<"bye\n"<<endl;
         return { {"error","username already exists"} };
     }
     const json profileManagement(const string& username, const string& password, const readJson& changes) {
