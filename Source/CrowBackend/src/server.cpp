@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Database.h"
 #include "server.h"
 
@@ -45,31 +46,32 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
         .methods("POST"_method)(
             [](const crow::request& req) {
                 Auth auth(req);
-                if (auth.empty)
+                if (auth.empty) 
                     return crow::response(MISSING_CREDENTIALS);
 
-                readJson changes = auth.data["changes"];
-                if (!changes||changes.t()!=crow::json::type::Object)
+                if (!auth.data.has("changes") || auth.data["changes"].t() != crow::json::type::Object)
                     return crow::response(MISSING_DATA);
-                //ensure correct data
-                if(changes.has("Full Name")&& changes["Full Name"].s().size()>50){
+
+                readJson changes = auth.data["changes"];
+                
+                if(changes.has("Full Name")&& changes["Full Name"].s().size()>50)
                     return crow::response(INPUT_MISMATCH);
-                }
-                if(changes.has("Address 1")&& changes["Address 1"].s().size()>100){
+                
+                if(changes.has("Address 1")&& changes["Address 1"].s().size()>100)
                     return crow::response(INPUT_MISMATCH);
-                }
-                if(changes.has("Address 2")&& changes["Address 2"].s().size()>100){
+                
+                if(changes.has("Address 2")&& changes["Address 2"].s().size()>100)
                     return crow::response(INPUT_MISMATCH);
-                }
-                if(changes.has("City")&& changes["City"].s().size()>100){
+                
+                if(changes.has("City")&& changes["City"].s().size()>100)
                     return crow::response(INPUT_MISMATCH);
-                }
-                if(changes.has("State")&& std::find(states.begin(),states.end(), changes["State"].s())==states.end()){
+                
+                if(changes.has("State")&& std::find(states.begin(),states.end(), changes["State"].s())==states.end())
                     return crow::response(INPUT_MISMATCH);
-                }
-                if(changes.has("Zipcode")&&(changes["Zipcode"].i()!=5 && changes["Zipcode"].i()!=9)){
+                
+                if(changes.has("Zipcode")&&(changes["Zipcode"].i()!=5 && changes["Zipcode"].i()!=9))
                     return crow::response(INPUT_MISMATCH);
-                }
+                
                 return crow::response(Routes::profileManagement(auth.username, auth.password, changes).dump());
             });
 
@@ -91,27 +93,6 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
                 return crow::response(Routes::getFuelQuoteHistory(auth.username, auth.password).dump());
             });
 
-    // CROW_ROUTE(app, "/api/predictRateOfFuel")
-    //     .methods("POST"_method)(
-    //         [](const crow::request& req) {
-    //             Auth auth(req);
-    //             if (auth.empty)
-    //                 return crow::response(MISSING_CREDENTIALS);
-
-    //             auto gallonsRequested = auth.data["gallonsRequested"];
-    //             auto companyProfitMargin = auth.data["companyProfitMargin"];
-    //             if(!gallonsRequested||gallonsRequested.t()!=crow::json::type::Number||
-    //                 !companyProfitMargin||companyProfitMargin.t()!=crow::json::type::Number)
-    //                 return crow::response(MISSING_DATA);
-                
-    //             return crow::response(
-    //                 Routes::predictRateOfFuel(
-    //                     auth.username, auth.password, 
-    //                     gallonsRequested.d(), companyProfitMargin.d()
-    //                 ).dump()
-    //             );
-    //         });
-
     CROW_ROUTE(app, "/api/predictRateOfFuel")
     .methods("POST"_method)(
         [](const crow::request& req) {
@@ -119,25 +100,20 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
             if (auth.empty || auth.password.empty())
                 return crow::response(400, MISSING_CREDENTIALS);
 
+            if (!auth.data.has("gallonsRequested") || !auth.data.has("companyProfitMargin"))
+                return crow::response(400, MISSING_DATA);
+
             auto gallonsRequested = auth.data["gallonsRequested"];
             auto companyProfitMargin = auth.data["companyProfitMargin"];
 
-            if (!gallonsRequested || gallonsRequested.t() != crow::json::type::Number ||
-                !companyProfitMargin || companyProfitMargin.t() != crow::json::type::Number) {
-                return crow::response(400, MISSING_DATA);
-            }
+            if(gallonsRequested.t() != crow::json::type::Number || companyProfitMargin.t() != crow::json::type::Number)
+                return crow::response(400, INPUT_MISMATCH);
 
-            // Check if gallonsRequested is a valid positive number
             double gallons = gallonsRequested.d();
-            if (gallons <= 0) {
-                return crow::response(400, MISSING_DATA);
-            }
-
-            // Check if companyProfitMargin is a valid positive number
             double profitMargin = companyProfitMargin.d();
-            if (profitMargin <= 0) {
-                return crow::response(400, MISSING_DATA);
-            }
+
+            if (gallons <= 0 || profitMargin <= 0) 
+                return crow::response(400, INPUT_MISMATCH);
 
             return crow::response(
                 Routes::predictRateOfFuel(

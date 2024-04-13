@@ -1,5 +1,5 @@
+#include "pch.h"
 #include "Database.h"
-#include <iomanip>
 
 FuelQuote::FuelQuote(unsigned int _id)
     :id(_id)
@@ -23,7 +23,7 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
 {
     id = database.insert(*this);
     client.mostRecentFuelQuoteId = id;
-    client.updateDatabase();
+    client.updateDatabase(change::mostRecentFuelQuoteId);
 
     rate = calculateRate(clientLocation, gallonsRequested);
     auto now = std::time(0);

@@ -33,6 +33,12 @@
     <ClCompile Include="dependencies\sqlite3\include\sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Database.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Routes.h">

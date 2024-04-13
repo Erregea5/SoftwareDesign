@@ -3,7 +3,15 @@
 #include "Routes.h"
 #include "Client.h"
 #include "FuelQuote.h"
-
+/*
+namespace crow {
+    class request;
+    class CORSHandler;
+    template<class T>
+    class App;
+}
+class readJson;
+*/
 #define MISSING_CREDENTIALS json{ {"error","Missing Credentials"} }
 #define MISSING_DATA json{ {"error","Missing Data"} }
 #define INPUT_MISMATCH json{{"error", "Input Mismatch"}}

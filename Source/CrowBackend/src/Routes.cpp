@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Routes.h"
 #include "Client.h"
 #include "FuelQuote.h"
@@ -23,14 +24,19 @@ namespace Routes {
         auto keys = changes.keys();
         cout << "keys: ";
         for (auto& key : keys) {//find way to do it without looping
-            if(key=="clientHistory") 
+            if (key == "clientHistory") {
                 client.clientHistory = ClientHistory(changes[key].i());
-            else if(key == "clientLocation")
+                client.updateDatabase(change::clientHistory);
+            }
+            else if (key == "clientLocation") {
                 client.clientLocation = ClientLocation(changes[key].i());
-            else if(key=="password")
+                client.updateDatabase(change::clientLocation);
+            }
+            else if (key == "password") {
                 client.password = string(changes[key].s());
+                client.updateDatabase(change::password);
+            }
         }
-        client.updateDatabase();
         return client.toJson();
     }
     const json predictRateOfFuel(const string& username, const string& password, const double gallonsRequested, const double companyProfitMargin) {
