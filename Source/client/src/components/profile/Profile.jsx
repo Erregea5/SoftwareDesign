@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Profile.css";
 
+import { manageProfile } from "../../communication";
+
 const Profile = () => {
   const [fullName, setFullName] = useState("");
   const [address1, setAddress1] = useState("");
@@ -26,6 +28,9 @@ const Profile = () => {
   };
 
   const handleFormSubmit = (e) => {
+    console.log(localStorage["username"]);
+    console.log(localStorage["password"]);
+
     e.preventDefault();
     const errors = {};
     let hasError = false;
@@ -55,20 +60,24 @@ const Profile = () => {
       hasError = true;
     }
 
-    if (!hasError) {
-      // Perform form submission logic here
-      console.log("Form submitted with:", {
-        fullName,
-        address1,
-        address2,
-        city,
-        state,
-        zipcode,
-      });
-      setFormSubmitted(true);
+    if (hasError) {
+      return setErrors(errors);
     }
 
-    setErrors(errors);
+    manageProfile({
+      fullName,
+      address1,
+      address2,
+      city,
+      state,
+      zipcode,
+    }).then((data) => {
+      if (data.error) alert(data.error);
+      else {
+        console.log(data);
+        setFormSubmitted(true);
+      }
+    });
   };
 
   const handleResetForm = () => {

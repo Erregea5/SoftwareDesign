@@ -1,43 +1,67 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
   faChevronDown,
   faCaretDown,
+  faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./History.module.scss";
-import { getFuelQuoteHistory } from "../../communication";
+import { getFuelQuoteHistory, fullfillPurchase } from "../../communication";
 
 import NavBar from "./NavBar";
 
 function Row({
-  cityState,
-  zipCode,
+  clientLocation,
   gallonsRequested,
-  profitMargin,
-  unitRate,
-  requestDate,
-  requestTime,
-  purchaseDate,
-  purchaseTime,
-  status,
+  companyProfitMargin,
+  rate: unitRate,
+  date: requestDate,
+  purchasedDate,
 }) {
+  const formatDateAndTime = (dateString) => {
+    if (!dateString || dateString === "null")
+      return { formattedDate: "", formattedTime: "-" };
+
+    const date = new Date(dateString);
+
+    const formattedDate = date.toLocaleDateString("en-US", {
+      month: "short", // Abbreviated month name
+      day: "numeric", // Numeric day, with no leading zeros
+      year: "numeric", // Full year
+    });
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: "numeric", // Numeric hour
+      minute: "2-digit", // Numeric minute
+      hour12: true, // 12-hour clock format
+    });
+    return { formattedDate, formattedTime };
+  };
+
+  const formattedRequestDate = formatDateAndTime(requestDate).formattedDate;
+  const formattedRequestTime = formatDateAndTime(requestDate).formattedTime;
+
+  const formattedPurchaseDate = formatDateAndTime(purchasedDate).formattedDate;
+  const formattedPurchaseTime = formatDateAndTime(purchasedDate).formattedTime;
+
+  const status =
+    !purchasedDate || purchasedDate === "null" ? "Pending" : "Fulfilled";
+
   return (
     <tr>
       <td>
-        <div className={`${styles.searchable} ${styles.first}`}>
-          {cityState}
+        <div className={`${styles.searchable} ${styles.pre}`}>
+          {clientLocation ? "In State" : "Out-Of-State"}
         </div>
-        <div className={`${styles.searchable} ${styles.last}`}>{zipCode}</div>
       </td>
       <td>
         <pre className={`${styles.searchable} ${styles.pre}`}>
-          {gallonsRequested}
+          {gallonsRequested} gal
         </pre>
       </td>
       <td>
         <pre className={`${styles.searchable} ${styles.pre}`}>
-          {profitMargin}%
+          {companyProfitMargin}%
         </pre>
       </td>
       <td>
@@ -47,18 +71,18 @@ function Row({
       </td>
       <td>
         <div className={`${styles.searchable} ${styles.date}`}>
-          {requestDate}
+          {formattedRequestDate}
         </div>
         <div className={`${styles.searchable} ${styles.time}`}>
-          {requestTime}
+          {formattedRequestTime}
         </div>
       </td>
       <td>
         <div className={`${styles.searchable} ${styles.date}`}>
-          {purchaseDate}
+          {formattedPurchaseDate}
         </div>
         <div className={`${styles.searchable} ${styles.time}`}>
-          {purchaseTime}
+          {formattedPurchaseTime}
         </div>
       </td>
       <td>
@@ -75,24 +99,35 @@ function Row({
 }
 
 export default function History() {
-  const [data,setData]=useState([]);
-  
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    getFuelQuoteHistory().then((val) => {
+      if (val && val.length) setData(val);
+    });
+  };
+
   useEffect(() => {
-    getFuelQuoteHistory()
-      .then(val=>{
-        if(val&&val.length)
-          setData(val);
-      })
+    fetchData();
     document.body.style.backgroundColor = "#08141a";
-    return () => {
-      document.body.style.backgroundColor = "";
-    };
+    return () => (document.body.style.backgroundColor = "");
   }, []);
+
+  const handleBuy = () => {
+    fullfillPurchase().then(() => fetchData());
+  };
 
   return (
     <>
       <NavBar />
       <main id={styles.container}>
+        <div id={styles.top}>
+          <h1 id={styles.heading}>Welcome back, {localStorage["username"]}</h1>
+          <button id={styles.switch} onClick={handleBuy}>
+            <FontAwesomeIcon icon={faMoneyCheckDollar} />
+            Buy Most Recent
+          </button>
+        </div>
         <section id={styles.controls} className={styles.section}>
           <p id={styles.searchText} className={styles.label}>
             What are you searching for?
