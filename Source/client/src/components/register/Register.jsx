@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   faCircleUser,
-  faEnvelope,
+  // faEnvelope,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { styles } from "../shared/AuthPageRight";
@@ -14,13 +14,23 @@ import { attemptRegister } from "../../communication";
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
     const username = e.target.username.value;
     // const email = e.target.email.value;
     const password = e.target.password.value;
-    attemptRegister(username, password).then(() => setIsLoading(false));
+    attemptRegister(username, password)
+      .then((data) => {
+        if (data.error) alert(data.error);
+        else {
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
+          navigate("/profile");
+        }
+      })
+      .then(() => setIsLoading(false));
   };
   const children = (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -31,30 +41,30 @@ export default function Register() {
         label="Username"
         minLength="2"
         maxLength="30"
-        // pattern="^[a-zA-Z]+$"
-        // title="Alphabetic characters only"
+        pattern="^[a-z0-9]{2,30}$"
+        title="Must be lowercase, alphanumeric, and between 2-30 characters."
         icon={faCircleUser}
       />
-      <Input
+      {/* <Input
         containerClassName={styles.input}
         type="email"
         name="email"
         label="Email"
-        minLength="2"
-        maxLength="60"
+        // minLength="2"
+        // maxLength="60"
         // pattern="^[a-zA-Z]+$"
         // title="Alphabetic characters only"
         icon={faEnvelope}
-      />
+      /> */}
       <Input
         containerClassName={styles.input}
         type="password"
         name="password"
         label="Password"
-        minLength="8"
-        maxLength="30"
-        // pattern="^[a-zA-Z]+$"
-        // title="Alphabetic characters only"
+        minLength="6"
+        maxLength="60"
+        pattern="^.{6,60}$"
+        title="Must be between 6-60 characters."
         icon={faLock}
       />
       <p id={styles.prompt}>

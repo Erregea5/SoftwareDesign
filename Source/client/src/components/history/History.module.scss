@@ -10,9 +10,42 @@
   padding: 4em 0;
 }
 
+#top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#heading {
+  font-size: 2em;
+  font-weight: 550;
+}
+
+#switch {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+  color: colors.$accent;
+  background: rgba(colors.$accent, 0.2);
+  border-radius: 100em;
+  padding: 0.75em 1.75em;
+  border: none;
+  font-size: 0.95em;
+  font-weight: 475;
+  transition: 0.3s ease;
+  &:hover {
+    filter: hue-rotate(-10deg);
+  }
+}
+
 .section {
   background: colors.$darkI;
   border-radius: 1.5em;
+
+  &:first-of-type {
+    margin-top: 1em;
+  }
 }
 
 .section:not(:first-of-type) {

@@ -2,10 +2,19 @@ import React from "react";
 import FuelQuoteForm from "./components/FuelQuoteForm";
 import "./Quote.css"; // Import CSS stylesheet
 
+import { predictRateOfFuel } from "../../communication";
+
 const Quote = () => {
   const handleSubmit = (gallonsRequested, deliveryDate) => {
     console.log("Form submitted with gallonsRequested:", gallonsRequested);
     console.log("Delivery date:", deliveryDate);
+
+    // TODO
+    const companyProfitMargin = 0.1;
+
+    predictRateOfFuel(gallonsRequested, companyProfitMargin).then((data) => {
+      console.log(data);
+    });
   };
 
   return (
