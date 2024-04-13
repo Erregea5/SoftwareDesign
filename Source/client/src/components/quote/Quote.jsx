@@ -5,12 +5,15 @@ import "./Quote.css"; // Import CSS stylesheet
 import { predictRateOfFuel } from "../../communication";
 
 const Quote = () => {
-  const handleSubmit = (gallonsRequested, deliveryDate) => {
+  const handleSubmit = (
+    gallonsRequested,
+    deliveryDate,
+    companyProfitMargin
+  ) => {
     console.log("Form submitted with gallonsRequested:", gallonsRequested);
     console.log("Delivery date:", deliveryDate);
 
     // TODO
-    const companyProfitMargin = 0.1;
 
     predictRateOfFuel(gallonsRequested, companyProfitMargin).then((data) => {
       console.log(data);
