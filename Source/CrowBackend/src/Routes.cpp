@@ -54,8 +54,11 @@ namespace Routes {
     const json getFuelQuoteHistory(const string& username, const string& password) {
         json output = {};
         auto history=Client(username, password).getFuelQuoteHistory();
-        for (auto& quote : history) 
-            output[quote.id] = json(quote.toJson());
+        int i = 0;
+        for (auto& quote : history)  {
+            output[i] = json(quote.toJson());
+            ++i;
+        }
         
         return output;
     }
