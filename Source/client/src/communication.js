@@ -30,12 +30,12 @@ function getFuelQuoteHistory() {
   });
 }
 
-function predictRateOfFuel(gallonsRequested, companyProfitMargins) {
+function predictRateOfFuel(gallonsRequested, companyProfitMargin) {
   return postData("predictRateOfFuel", {
     username: localStorage["username"],
     password: localStorage["password"],
     gallonsRequested,
-    companyProfitMargins,
+    companyProfitMargin,
   });
 }
 
