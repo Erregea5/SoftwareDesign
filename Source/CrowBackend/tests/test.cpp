@@ -1,5 +1,5 @@
 #include "pch.h"
-/*
+
 #define CATCH_CONFIG_MAIN
 #include "../src/server.h"
 #include <catch.hpp>
@@ -63,13 +63,13 @@ TEST_CASE("profile management test"){
     crow::response res;
     req.url = "/api/profileManagement";
     req.method = crow::HTTPMethod::POST;
-req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"Full Name", "test tester"}
-    }}
-}).dump();
+    req.body = json({
+        {"password", "pass"},
+        {"username", "user"},
+        {"changes", {
+            {"Full Name", "test tester"}
+        }}
+    }).dump();
     SECTION("attempt profile update without password") {
         req.body = json({ {"username","user"},{"fullname","test tester"} }).dump();
         app.handle_full(req, res);
@@ -94,12 +94,12 @@ req.body = json({
 
     SECTION("profile update changing nonexistent field"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"age", "21"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"age", "21"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -116,12 +116,12 @@ req.body = json({
     
     SECTION("profile update invalid long name"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"Full Name", "123456789012345678901234567890123456789012345678901"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"Full Name", "123456789012345678901234567890123456789012345678901"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -130,12 +130,12 @@ req.body = json({
 
     SECTION("profile update invalid address 1 too long"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"Address 1", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"Address 1", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -144,12 +144,12 @@ req.body = json({
 
     SECTION("profile update invalid address 2 too long"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"Address 2", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"Address 2", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -158,12 +158,12 @@ req.body = json({
 
     SECTION("profile update invalid city too long"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"City", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"City", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -172,12 +172,12 @@ req.body = json({
 
     SECTION("profile update invalid incorrect state name"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"State", "BK"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"State", "BK"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -186,12 +186,12 @@ req.body = json({
 
     SECTION("profile update invalid zipcode"){
         req.body = json({
-    {"password", "pass"},
-    {"username", "user"},
-    {"changes", {
-        {"Zipcode", "1234567"}
-    }}
-}).dump();
+            {"password", "pass"},
+            {"username", "user"},
+            {"changes", {
+                {"Zipcode", "1234567"}
+            }}
+        }).dump();
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
@@ -320,11 +320,7 @@ TEST_CASE("attempt fulfill purchase") {
         app.handle_full(req, res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        // REQUIRE(data["status"] == "success");
-
-        // json client = database["Client"]["user"];
-        // int mostRecentFuelQuoteId = stoi(client["mostRecentFuelQuoteId"].dump());
-        // REQUIRE(database["FuelQuote"][mostRecentFuelQuoteId]["purchasedDate"].dump() != "null");
+        REQUIRE(data["status"]=="success");
     }
 
     SECTION("attempt fulfill purchase without password") {
@@ -332,7 +328,7 @@ TEST_CASE("attempt fulfill purchase") {
         app.handle_full(req, res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        REQUIRE(data["error"]=="Missing Credentials");
+        REQUIRE(data["status"]=="failure");
     }
     
     SECTION("attempt fulfill purchase without username") {
@@ -340,7 +336,7 @@ TEST_CASE("attempt fulfill purchase") {
         app.handle_full(req, res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        REQUIRE(data["error"]=="Missing Credentials");
+        REQUIRE(data["status"]=="failure");
     }
 
     SECTION("attempt purchase fuelquote invalid method") {
@@ -366,23 +362,18 @@ TEST_CASE("login - /api/login route") {
         req.url = "/api/login";
         req.method = crow::HTTPMethod::POST;
         req.body = json({{"password", "valid_pass"}, {"username", "valid_user"}}).dump();
-
         app.handle_full(req, res);
-        auto data = crow::json::load(res.body);
+        //auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        // Add more assertions based on expected response data
     }
 
     SECTION("Login with missing credentials") {
         req.url = "/api/login";
         req.method = crow::HTTPMethod::POST;
-        // No body provided
-
+        req.body = json({{"password", ""}, {"username", "valid_user"}}).dump();
         app.handle_full(req, res);
         REQUIRE(res.code == 400);
-        // Add assertions for the error response, if applicable
     }
 
     // Add more test cases as needed to cover different scenarios
 }
-*/
