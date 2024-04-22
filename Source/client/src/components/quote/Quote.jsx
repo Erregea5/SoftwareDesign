@@ -41,9 +41,6 @@ const Quote = () => {
 
   return (
     <div className="card-container">
-      <a className="back-button" href="./">
-        Home
-      </a>
       <div className="card">
         <FuelQuoteForm
           deliveryAddress={deliveryAddress} // Pass deliveryAddress here

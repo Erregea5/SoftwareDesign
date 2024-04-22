@@ -1,213 +1,197 @@
 :root {
-    --main-bg-color: rgba(255, 255, 255, 0.05);
-    /* Main background color with transparency */
-    --input-bg-color: rgba(255, 255, 255, 0.05);
-    /* Input background color with transparency */
-    --select-bg-color: rgba(255, 255, 255, 0.05);
-    /* Select background color with transparency */
+  --main-bg-color: rgba(255, 255, 255, 0.05);
+  /* Main background color with transparency */
+  --input-bg-color: rgba(255, 255, 255, 0.05);
+  /* Input background color with transparency */
+  --select-bg-color: rgba(255, 255, 255, 0.05);
+  /* Select background color with transparency */
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./background.jpg');
-    background-size: cover;
-    background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("./background.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .card {
-    width: 400px;
-    padding: 20px;
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
-    background: var(--main-bg-color);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    color: white;
+  width: 400px;
+  padding: 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  background: var(--main-bg-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  color: white;
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .input-container {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .label {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .input {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--input-bg-color);
-    /* Using dynamic input background color */
-    color: white;
-    outline: none;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--input-bg-color);
+  /* Using dynamic input background color */
+  color: white;
+  outline: none;
 }
 
 .input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .submit-button {
-    align-self: flex-end;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 8px;
-    background-color: purple;
-    color: white;
-    cursor: pointer;
-    outline: none;
-    transition: background-color 0.3s ease;
-    font-family: 'Poppins', sans-serif;
+  align-self: flex-end;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: purple;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .submit-button:hover {
-    background-color: #6a0dad;
-}
-
-.back-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: purple;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-.back-button:hover {
-    background-color: #6a0dad;
-    /* Darker shade of purple on hover */
+  background-color: #6a0dad;
 }
 
 /* Additional Styles for Calendar */
 .calendar-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    /* Adjust the top margin as needed */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  /* Adjust the top margin as needed */
 }
 
 .react-datepicker-wrapper {
-    width: auto;
-    /* Remove the width constraint */
+  width: auto;
+  /* Remove the width constraint */
 }
 
 .react-datepicker {
-    font-family: 'Poppins', sans-serif;
-    background-color: rgba(255, 255, 255, 0);
-    /* Set the background color */
-    border: none;
-    border-radius: 16px;
-    /* Apply border-radius */
-    backdrop-filter: blur(8px);
-    /* Apply backdrop-filter for glassmorphism */
-    color: white;
+  font-family: "Poppins", sans-serif;
+  background-color: rgba(255, 255, 255, 0);
+  /* Set the background color */
+  border: none;
+  border-radius: 16px;
+  /* Apply border-radius */
+  backdrop-filter: blur(8px);
+  /* Apply backdrop-filter for glassmorphism */
+  color: white;
 }
 
 .react-datepicker__input-container {
-    display: block;
+  display: block;
 }
 
 .react-datepicker__input-container input {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    background-color: transparent;
-    /* Set input background color to transparent */
-    color: white;
-    outline: none;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background-color: transparent;
+  /* Set input background color to transparent */
+  color: white;
+  outline: none;
 }
 
 .react-datepicker__input-container input::placeholder {
-    color: rgba(255, 255, 255, 0);
+  color: rgba(255, 255, 255, 0);
 }
 
 .react-datepicker__day-name,
 .react-datepicker__day {
-    color: white;
-    /* Set day text color */
+  color: white;
+  /* Set day text color */
 }
 
 .react-datepicker__day:hover {
-    background-color: rgba(255, 255, 255, 0);
-    /* Apply hover background color */
+  background-color: rgba(255, 255, 255, 0);
+  /* Apply hover background color */
 }
 
 .react-datepicker__current-month {
-    color: rgb(255, 255, 255);
-    /* Set month text color */
+  color: rgb(255, 255, 255);
+  /* Set month text color */
 }
 
 /* Additional Styles for Calendar Header */
 .react-datepicker__header {
-    background-color: transparent;
-    /* Set header background color to transparent */
+  background-color: transparent;
+  /* Set header background color to transparent */
 }
 
 .react-datepicker__header--custom {
-    background-color: transparent;
-    /* Set custom header background color to transparent */
-    border: none;
-    /* Remove border */
+  background-color: transparent;
+  /* Set custom header background color to transparent */
+  border: none;
+  /* Remove border */
 }
 
 .react-datepicker__current-month,
 .react-datepicker__navigation {
-    color: white;
-    /* Set month and navigation text color */
+  color: white;
+  /* Set month and navigation text color */
 }
 
 .react-datepicker__navigation {
-    top: 10px;
-    /* Adjust the top position of navigation buttons */
+  top: 10px;
+  /* Adjust the top position of navigation buttons */
 }
 
 .react-datepicker__navigation--next {
-    right: 10px;
-    /* Adjust the right position of next navigation button */
+  right: 10px;
+  /* Adjust the right position of next navigation button */
 }
 
 .react-datepicker__navigation--previous {
-    left: 10px;
-    /* Adjust the left position of previous navigation button */
+  left: 10px;
+  /* Adjust the left position of previous navigation button */
 }
 
 /* Additional Styles for Dropdown Menu */
 .input-container select {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--select-bg-color);
-    /* Using dynamic select background color */
-    color: white;
-    outline: none;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--select-bg-color);
+  /* Using dynamic select background color */
+  color: white;
+  outline: none;
 }
 
 .input-container select option {
-    background-color: var(--select-bg-color);
-    /* Using dynamic select background color */
-    color: rgb(49, 40, 40);
-    border: none;
-    border-radius: 8px;
+  background-color: var(--select-bg-color);
+  /* Using dynamic select background color */
+  color: rgb(49, 40, 40);
+  border: none;
+  border-radius: 8px;
 }
 
 .input-container select:focus {
-    background-color: rgba(255, 255, 255, 0.1);
-    /* Adjusted transparency */
+  background-color: rgba(255, 255, 255, 0.1);
+  /* Adjusted transparency */
 }

@@ -196,6 +196,7 @@ thead tr {
 
 thead th {
   font-weight: 500;
+  white-space: nowrap;
 }
 
 tbody tr:hover {
@@ -278,58 +279,7 @@ tbody .highlighted {
   border-radius: 0.5em;
   font-size: 0.9em;
   margin: 0;
-}
-
-#pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em 1.5em;
-  position: relative;
-}
-
-#pagination p {
-  color: colors.$grey;
-  font-size: 0.85em;
-}
-
-#recordSize {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-#recordsDropdownContainer {
-  position: relative;
-}
-
-#recordsDropdownContainer:hover,
-#recordsDropdownContainer:focus-within {
-  filter: brightness(1.25);
-  transition: 0.1s ease;
-}
-
-#caretDownIcon {
-  color: colors.$grey;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0.65em;
-  margin-top: -0.05em;
-  font-size: 0.85em;
-  pointer-events: none;
-  user-select: none;
-}
-
-#recordSize select {
-  font-size: 0.85em;
-  border-radius: 0.5em;
-  background: colors.$darkI;
-  cursor: pointer;
-  padding: 0.25em 1.5em 0.25em 0.75em;
-  color: colors.$grey;
-  border: 3px solid colors.$darkIV;
-  appearance: none; /* emoves default browser styles */
+  white-space: nowrap;
 }
 
 .chevronDownIcon {

@@ -5,12 +5,11 @@ import { Link } from "react-router-dom";
 
 import "./tailwind.css";
 import logo from "../shared/images/logos/logo-chromatic-white@1x.svg";
-import AuthContext from "../../contexts/AuthContext";
+import AuthContext from "../authentication/AuthContext";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: false },
-  { name: "Branches", href: "#", current: false },
-  { name: "Products", href: "#", current: false },
+  { name: "Quote History", href: "/history", current: false },
+  { name: "Get Quote", href: "/quote", current: false },
 ];
 
 function classNames(...classes) {
@@ -19,9 +18,9 @@ function classNames(...classes) {
 
 // https://tailwindui.com/components/application-ui/navigation/navbars
 export default function NavBar() {
-  const { user, logout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
 
-  const DEFAULT_PROFILE_PICTURE =
+  const profilePicture =
     "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg";
 
   return (
@@ -75,7 +74,7 @@ export default function NavBar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={user.profile_picture ?? DEFAULT_PROFILE_PICTURE}
+                        src={profilePicture}
                         alt=""
                       />
                     </Menu.Button>
@@ -124,12 +123,14 @@ export default function NavBar() {
               </div>
             </div>
           </div>
+
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
-                <Link
+                <Disclosure.Button
                   key={item.name}
-                  to={item.href}
+                  as="a"
+                  href={item.href}
                   className={classNames(
                     item.current
                       ? "bg-gray-900 text-white"
@@ -139,7 +140,7 @@ export default function NavBar() {
                   aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
-                </Link>
+                </Disclosure.Button>
               ))}
             </div>
           </Disclosure.Panel>
