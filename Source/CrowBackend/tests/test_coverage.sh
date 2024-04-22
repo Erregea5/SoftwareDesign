@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# # Function to get the absolute path
-# getAbsolute() {
-#     REL_PATH=$1
-#     cd "$REL_PATH" || exit
-#     ABS_PATH=$(pwd)
-#     echo "$ABS_PATH"
-# }
+# Function to get the absolute path
+getAbsolute() {
+    REL_PATH=$1
+    cd "$REL_PATH" || exit
+    ABS_PATH=$(pwd)
+    echo "$ABS_PATH"
+}
 
-# # Get absolute paths for dependencies
-# asio=$(getAbsolute "../dependencies/asio/include")
-# crow=$(getAbsolute "../dependencies/Crow/include")
-# catch=$(getAbsolute "../dependencies/catch2/include")
-# sqlite_orm=$(getAbsolute "../dependencies/sqlite_orm/include")
+# Get absolute paths for dependencies
+asio=$(getAbsolute "../dependencies/asio/include")
+crow=$(getAbsolute "../dependencies/Crow/include")
+catch=$(getAbsolute "../dependencies/catch2/include")
+sqlite_orm=$(getAbsolute "../dependencies/sqlite_orm/include")
 
 # # Compile and link
 # g++ -D TEST \

@@ -25,7 +25,7 @@ namespace Routes {
                 client.clientHistory = ClientHistory(changes[key].i());
                 client.updateDatabase(change::clientHistory);
             }
-            else if (key == "clientLocation") {
+            else if (key == "state") {
                 if(changes[key].s()=="TX"){
                     client.clientLocation = ClientLocation(0);
                 }

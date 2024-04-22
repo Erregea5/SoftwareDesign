@@ -1,20 +1,17 @@
-import { useContext, useState } from "react";
+import {  useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   faCircleUser,
-  // faEnvelope,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { styles } from "../shared/AuthPageRight";
 import AuthPage from "../shared/AuthPage";
 import Button from "../shared/Button";
-import Input from "../shared/Input";
+import Input, { VALIDATORS } from "../shared/Input";
 
-import AuthContext from "../authentication/AuthContext";
 import { attemptRegister } from "../../communication";
 
 export default function Register() {
-  const { login } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -22,14 +19,13 @@ export default function Register() {
     e.preventDefault();
     setIsLoading(true);
     const username = e.target.username.value;
-    // const email = e.target.email.value;
     const password = e.target.password.value;
     attemptRegister(username, password)
       .then((data) => {
         if (data.error) alert(data.error);
         else {
-          login(username, password);
-          navigate("/profile");
+          alert("Registration successful. Please sign in to continue.")
+          navigate("/login");
         }
       })
       .then(() => setIsLoading(false));
@@ -42,33 +38,16 @@ export default function Register() {
         type="text"
         name="username"
         label="Username"
-        minLength="2"
-        maxLength="30"
-        pattern="^[a-z0-9]{2,30}$"
-        title="Must be lowercase, alphanumeric, and between 2-30 characters."
         icon={faCircleUser}
+        {...VALIDATORS.USERNAME}
       />
-      {/* <Input
-        containerClassName={styles.input}
-        type="email"
-        name="email"
-        label="Email"
-        // minLength="2"
-        // maxLength="60"
-        // pattern="^[a-zA-Z]+$"
-        // title="Alphabetic characters only"
-        icon={faEnvelope}
-      /> */}
       <Input
         containerClassName={styles.input}
         type="password"
         name="password"
         label="Password"
-        minLength="6"
-        maxLength="60"
-        pattern="^.{6,60}$"
-        title="Must be between 6-60 characters."
         icon={faLock}
+        {...VALIDATORS.PASSWORD}
       />
       <p id={styles.prompt}>
         By registering, you accept our{" "}

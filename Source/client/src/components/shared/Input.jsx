@@ -37,3 +37,21 @@ export default function Input({
     </div>
   );
 }
+
+const VALIDATORS = Object.freeze({
+  USERNAME: {
+    minLength: 2,
+    maxLength: 30,
+    pattern: /^[a-z0-9]{2,30}$/.source,
+    title: "Must be lowercase, alphanumeric, and between 2-30 characters.",
+  },
+  PASSWORD: {
+    minLength: 6,
+    maxLength: 60,
+    pattern: null,
+    title:
+      "Must be between 6-60 characters. No other special requirements for now.",
+  },
+});
+
+export { VALIDATORS };
