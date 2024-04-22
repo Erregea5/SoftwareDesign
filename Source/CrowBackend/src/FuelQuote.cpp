@@ -34,7 +34,7 @@ const double FuelQuote::calculateRate(int location, int clientHistory, double ga
     // Calculate the suggested price per gallon
     const double suggestedPricePerGallon = currentPricePerGallon + margin;
 
-    return gallons * suggestedPricePerGallon;
+    return suggestedPricePerGallon;
 }
 
 FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const double _companyProfitMargin)
