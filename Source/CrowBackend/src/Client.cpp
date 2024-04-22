@@ -11,8 +11,12 @@ Client::Client(const string& username, const string& password,bool loggingIn)
 		if (rows.size()==0) {
 			database.insert(or_abort(),
 				into<Client>(),
-				columns(&Client::username,&Client::password),
-				values(make_tuple(username, password)));
+				columns(
+					&Client::username,
+					&Client::password,
+					&Client::clientLocation
+				),
+				values(make_tuple(username, password, 1)));
 			rows = database.get_all<Client>(where(c(&Client::username) == username));
 			if (rows.size() == 0) {
 				loggedIn = false;

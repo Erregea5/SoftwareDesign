@@ -30,6 +30,7 @@ function Row({
   totalAmountDue,
   requestDate,
   purchaseDate,
+  status,
 }) {
   const formatDateAndTime = (dateString) => {
     if (!dateString || dateString === "null")
@@ -55,9 +56,6 @@ function Row({
 
   const formattedPurchaseDate = formatDateAndTime(purchaseDate).formattedDate;
   const formattedPurchaseTime = formatDateAndTime(purchaseDate).formattedTime;
-
-  const status =
-    !purchaseDate || purchaseDate === "null" ? "Pending" : "Fulfilled";
 
   return (
     <tr>
@@ -127,7 +125,10 @@ function Row({
 }
 
 const parseFuelQuoteHistory = (data) => {
-  return data.map((row) => {
+  return data.map((row, index) => {
+    const status =
+      (row.purchasedDate !== "null") ? "Fulfilled" :
+      (index == data.length - 1) ? "Pending" : "Expired";
     return {
       clientLocation: row.clientLocation,
       gallonsRequested: row.gallonsRequested,
@@ -135,6 +136,7 @@ const parseFuelQuoteHistory = (data) => {
       totalAmountDue: row.gallonsRequested * row.rate,
       requestDate: row.date,
       purchaseDate: row.purchasedDate,
+      status,
     };
   });
 };
