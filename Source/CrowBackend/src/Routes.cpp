@@ -5,7 +5,7 @@
 
 namespace Routes { 
     const json login(const string& username, const string& password) {
-        if(username ==""||username==NULL ||password==""||password==NULL){
+        if(username =="" ||password==""){
             return { {"error","missing username/password"} };
         }
         Client client(username, password);
