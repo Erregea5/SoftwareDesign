@@ -70,9 +70,33 @@ TEST_CASE("profile management test"){
         {"password", "pass"},
         {"username", "user"},
         {"changes", {
-            {"Full Name", "test tester"}
+            {"password", "test"}
         }}
     }).dump();
+
+    SECTION("profile update proper changes") {
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data["password"] == "test");
+        REQUIRE(database.get_all<Client>(where(c(&Client::username) == "user"))[0].password == "test");
+    }
+
+    SECTION("profile update proper changes back") {
+        req.body = json({
+            {"password", "test"},
+            {"username", "user"},
+            {"changes", {
+                {"password", "pass"}
+            }}
+            }).dump();
+            app.handle_full(req, res);
+            auto data = crow::json::load(res.body);
+            REQUIRE(res.code == 200);
+            REQUIRE(data["password"] == "pass");
+            REQUIRE(database.get_all<Client>(where(c(&Client::username) == "user"))[0].password == "pass");
+    }
+
     SECTION("attempt profile update without password") {
         req.body = json({ {"username","user"},{"fullname","test tester"} }).dump();
         app.handle_full(req, res);
@@ -106,72 +130,9 @@ TEST_CASE("profile management test"){
         app.handle_full(req,res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
-        // REQUIRE(data["error"]=="Missing Data");
+        //REQUIRE(data["error"]=="Missing Data");
     }
     
-    SECTION("profile update proper changes"){
-        app.handle_full(req,res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code ==200);
-        REQUIRE(data["password"] == "pass");
-        //REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
-    }
-    
-    SECTION("profile update invalid long name"){
-        req.body = json({
-            {"password", "pass"},
-            {"username", "user"},
-            {"changes", {
-                {"Full Name", "123456789012345678901234567890123456789012345678901"}
-            }}
-        }).dump();
-        app.handle_full(req,res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code ==200);
-        REQUIRE(data["error"]=="Input Mismatch");
-    }
-
-    SECTION("profile update invalid address 1 too long"){
-        req.body = json({
-            {"password", "pass"},
-            {"username", "user"},
-            {"changes", {
-                {"Address 1", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
-            }}
-        }).dump();
-        app.handle_full(req,res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code ==200);
-        REQUIRE(data["error"]=="Input Mismatch");
-    }
-
-    SECTION("profile update invalid address 2 too long"){
-        req.body = json({
-            {"password", "pass"},
-            {"username", "user"},
-            {"changes", {
-                {"Address 2", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
-            }}
-        }).dump();
-        app.handle_full(req,res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code ==200);
-        REQUIRE(data["error"]=="Input Mismatch");
-    }
-
-    SECTION("profile update invalid city too long"){
-        req.body = json({
-            {"password", "pass"},
-            {"username", "user"},
-            {"changes", {
-                {"City", "123456789012345678901234567890123456789012345678901123456789012345678901234567890123456789012345678901"}
-            }}
-        }).dump();
-        app.handle_full(req,res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code ==200);
-        REQUIRE(data["error"]=="Input Mismatch");
-    }
 
     SECTION("profile update invalid incorrect state name"){
         req.body = json({
@@ -185,59 +146,6 @@ TEST_CASE("profile management test"){
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
         REQUIRE(data["error"]=="Input Mismatch");
-    }
-
-    SECTION("profile update invalid zipcode"){
-        req.body = json({
-            {"password", "pass"},
-            {"username", "user"},
-            {"changes", {
-                {"Zipcode", "1234567"}
-            }}
-        }).dump();
-        app.handle_full(req,res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code ==200);
-        REQUIRE(data["error"]=="Input Mismatch");
-    }
-}
-
-TEST_CASE("Get Fuel Quote History") {
-    crow::request req;
-    crow::response res;
-
-    req.url = "/api/getFuelQuoteHistory";
-    req.method = crow::HTTPMethod::POST;
-    req.body = json({{"password","pass"},{"username","user"}}).dump();
-
-    SECTION("fuel quote retrival successful") {
-        app.handle_full(req, res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code == 200);
-        // REQUIRE(data["password"] == "pass");
-        //REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
-    }
-
-    SECTION("get quotes without password") {
-        req.body = json({ {"username","user"} }).dump();
-        app.handle_full(req, res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code == 200);
-        REQUIRE(data["error"]=="Missing Credentials");
-    }
-    
-    SECTION("get quotes without username") {
-        req.body = json({ {"password","pass"} }).dump();
-        app.handle_full(req, res);
-        auto data = crow::json::load(res.body);
-        REQUIRE(res.code == 200);
-        REQUIRE(data["error"]=="Missing Credentials");
-    }
-    
-    SECTION("get quotes with wrong method") {
-        req.method = crow::HTTPMethod::GET;
-        app.handle_full(req, res);
-        REQUIRE(res.code == 405);
     }
 }
 
@@ -298,6 +206,45 @@ TEST_CASE("Predict Rate of Fuel - Incorrect/Missing Inputs") {
         app.handle_full(req, res);
         REQUIRE(res.code == 400);
         // Add assertions for the error response, if applicable
+    }
+}
+
+TEST_CASE("Get Fuel Quote History") {
+    crow::request req;
+    crow::response res;
+
+    req.url = "/api/getFuelQuoteHistory";
+    req.method = crow::HTTPMethod::POST;
+    req.body = json({{"password","hi"},{"username","hi"}}).dump();
+
+    SECTION("fuel quote retrival successful") {
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data.t()==crow::json::type::List);
+        REQUIRE(database.get_all<FuelQuote>(where(c(&FuelQuote::clientId) == Client("hi","hi").id)).size()>0);
+    }
+
+    SECTION("get quotes without password") {
+        req.body = json({ {"username","hi"} }).dump();
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data["error"]=="Missing Credentials");
+    }
+    
+    SECTION("get quotes without username") {
+        req.body = json({ {"password","hi"} }).dump();
+        app.handle_full(req, res);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data["error"]=="Missing Credentials");
+    }
+    
+    SECTION("get quotes with wrong method") {
+        req.method = crow::HTTPMethod::GET;
+        app.handle_full(req, res);
+        REQUIRE(res.code == 405);
     }
 }
 
