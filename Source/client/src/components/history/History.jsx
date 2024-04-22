@@ -65,7 +65,7 @@ function Row({
         <div
           className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
         >
-          {clientLocation ? "In State" : "Out-Of-State"}
+          {clientLocation ? "Out-Of-State" : "In State"}
         </div>
       </td>
       <td>

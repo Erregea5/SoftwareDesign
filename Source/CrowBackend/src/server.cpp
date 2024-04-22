@@ -107,7 +107,6 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
             );
         });
 }
-#define TEST
 #ifndef TEST
 int main() {
     crow::App<crow::CORSHandler> app;

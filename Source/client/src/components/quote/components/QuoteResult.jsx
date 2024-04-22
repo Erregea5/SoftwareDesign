@@ -13,8 +13,8 @@ const QuoteResult = ({ price, numGal }) => {
 
   return (
     <div>
-      <h2>Suggested Price / Gallon: {pricePerGallon}</h2>
-      <h2>Total Amount Due: {totalAmountDue}</h2>
+      <h2>Suggested Price: ${pricePerGallon}/gal</h2>
+      <h2>Total Amount Due: ${totalAmountDue}</h2>
       <br />
     </div>
   );

@@ -31,7 +31,7 @@ const Quote = () => {
     console.log("Form submitted with gallonsRequested:", gallonsRequested);
     console.log("Delivery date:", deliveryDate);
 
-    predictRateOfFuel(parseFloat(gallonsRequested), 0.1).then((data) => {
+    predictRateOfFuel(parseFloat(gallonsRequested)).then((data) => {
       console.log("Data: ", data);
 
       setSuggestedPrice(data.quote.rate);
