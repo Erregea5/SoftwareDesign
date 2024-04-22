@@ -53,22 +53,7 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
 
                 readJson changes = auth.data["changes"];
                 
-                if(changes.has("Full Name")&& changes["Full Name"].s().size()>50)
-                    return crow::response(INPUT_MISMATCH);
-                
-                if(changes.has("Address 1")&& changes["Address 1"].s().size()>100)
-                    return crow::response(INPUT_MISMATCH);
-                
-                if(changes.has("Address 2")&& changes["Address 2"].s().size()>100)
-                    return crow::response(INPUT_MISMATCH);
-                
-                if(changes.has("City")&& changes["City"].s().size()>100)
-                    return crow::response(INPUT_MISMATCH);
-                
                 if(changes.has("State")&& std::find(states.begin(),states.end(), changes["State"].s())==states.end())
-                    return crow::response(INPUT_MISMATCH);
-                
-                if(changes.has("Zipcode")&&(changes["Zipcode"].i()!=5 && changes["Zipcode"].i()!=9))
                     return crow::response(INPUT_MISMATCH);
                 
                 return crow::response(Routes::profileManagement(auth.username, auth.password, changes).dump());

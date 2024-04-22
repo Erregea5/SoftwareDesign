@@ -1,4 +1,5 @@
-const serverUrl = "http://localhost:18080/api/"; // Make this an environment variable later
+// const serverUrl = "http://localhost:18080/api/"; // Make this an environment variable later
+const serverUrl = "http://164.152.23.94:18080/api/"; // Make this an environment variable later
 
 function attemptLogin(username, password) {
   return postData("login", { username, password });

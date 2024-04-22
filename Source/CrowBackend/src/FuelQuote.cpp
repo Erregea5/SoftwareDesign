@@ -16,7 +16,7 @@ FuelQuote::FuelQuote(unsigned int _id)
     purchasedDate = rows[0].purchasedDate;
 }
 
-double calculateRate(int location, int clientHistory, double gallons)  {
+const double FuelQuote::calculateRate(int location, int clientHistory, double gallons) {
     const double currentPricePerGallon = 1.5; // Constant price per gallon
     const double locationFactor = location == 1 ? 0.02 : 0.04; // Assuming Texas is 1, others are 0
     const double rateHistoryFactor = clientHistory; // No history factor in C++
@@ -58,6 +58,7 @@ FuelQuote::FuelQuote(Client& client, const double _gallonsRequested, const doubl
 
     updateDatabase();
 }
+
 
 const void FuelQuote::updateDatabase()
 {
