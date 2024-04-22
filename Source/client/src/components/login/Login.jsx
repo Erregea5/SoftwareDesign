@@ -4,7 +4,7 @@ import { faUserCircle, faLock } from "@fortawesome/free-solid-svg-icons";
 import { styles } from "../shared/AuthPageRight";
 import AuthPage from "../shared/AuthPage";
 import Button from "../shared/Button";
-import Input from "../shared/Input";
+import Input, { VALIDATORS } from "../shared/Input";
 
 import AuthContext from "../authentication/AuthContext";
 import { attemptLogin } from "../../communication";
@@ -38,6 +38,7 @@ export default function Login() {
         name="username"
         label="Username"
         icon={faUserCircle}
+        {...VALIDATORS.USERNAME}
       />
       <Input
         containerClassName={styles.input}
@@ -45,6 +46,7 @@ export default function Login() {
         name="password"
         label="Password"
         icon={faLock}
+        {...VALIDATORS.PASSOWRD}
       />
       <p id={styles.prompt}>
         <Link to="#" className={styles.link}>

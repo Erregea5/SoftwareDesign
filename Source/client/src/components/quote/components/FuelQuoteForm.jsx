@@ -53,6 +53,7 @@ const FuelQuoteForm = ({
               onChange={(e) => setGallonsRequested(e.target.value)}
               required
               className="input"
+              min="1"
             />
           </div>
           <div className="input-container">

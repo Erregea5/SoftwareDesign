@@ -1,14 +1,18 @@
 #include "pch.h"
 #include "Database.h"
-#include <iostream>
-
 Storage make_Database() {
-    auto test = make_storage("db2.sqlite",
+    return make_storage("db.sqlite",
         make_table("Clients",
             make_column("Client_ID", &Client::id, primary_key().autoincrement()),
             make_column("Username", &Client::username, unique()),
             make_column("Password", &Client::password),
             make_column("Location", &Client::clientLocation),
+            make_column("Full_Name", &Client::fullName),
+            make_column("Zipcode",&Client::zipcode),
+            make_column("City",&Client::city),
+            make_column("State", &Client::state),
+            make_column("Address_2", &Client::address2),
+            make_column("Address_1", &Client::address1),
             make_column("Most_Recent_Fuel_Quote_ID", &Client::mostRecentFuelQuoteId),
             foreign_key(&Client::mostRecentFuelQuoteId).references(&FuelQuote::id)
         ),
@@ -24,7 +28,4 @@ Storage make_Database() {
             foreign_key(&FuelQuote::clientId).references(&Client::id)
         )
     );
-    std::cout << "sigma";
-    test.sync_schema();
-    return test;
 }

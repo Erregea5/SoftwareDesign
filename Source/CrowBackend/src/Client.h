@@ -4,17 +4,17 @@
 #include <vector>
 //class json;
 class FuelQuote;
-enum change {
-    password,clientLocation,clientHistory,mostRecentFuelQuoteId
-};
 class Client {
 public:
     unsigned id;
     std::string username;
     std::string password;
-    int clientLocation;
-    int clientHistory;
+    unsigned clientLocation;
+    unsigned clientHistory;
     unsigned mostRecentFuelQuoteId; // Foreign key "pointing" to a `FuelQuote`'s `id`
+    std::string fullName;
+    unsigned zipcode;
+    std::string city, state, address2, address1;
     bool loggedIn;
 public:
     Client() {}
@@ -23,7 +23,8 @@ public:
     const FuelQuote getMostRecentFuelQuote() const;
     const bool buyFuel(); // Purchase the FuelQuote with `id` = `mostRecentFuelQuoteId` and set `purchasedDate` to `time(NULL)`
     std::vector<FuelQuote> getFuelQuoteHistory() const;
-    const void updateDatabase(change change_);
+    const void update(std::string Client::*member,const std::string& val);
+    const void update(unsigned Client::*member, unsigned val);
     const json toJson();
 };
 #endif

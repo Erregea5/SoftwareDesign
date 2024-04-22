@@ -83,36 +83,20 @@ vector<FuelQuote> Client::getFuelQuoteHistory() const
 	return database.get_all<FuelQuote>(where(c(&FuelQuote::clientId) == id));
 }
 
-const void Client::updateDatabase(change change_)
+const void Client::update(std::string Client::*member, const std::string& val)
 {
-	if (!loggedIn)
-		return;
-	switch (change_) {
-	case change::password:
-		database.update_all(
-			sqlite_orm::set(c(&Client::password) = password),
-			where(c(&Client::id) == id)
-		);
-		break;
-	case change::clientHistory:
-		database.update_all(
-			sqlite_orm::set(c(&Client::clientHistory) = clientHistory),
-			where(c(&Client::id) == id)
-		);
-		break;
-	case change::clientLocation:
-		database.update_all(
-			sqlite_orm::set(c(&Client::clientLocation) = clientLocation),
-			where(c(&Client::id) == id)
-		);
-		break;
-	case change::mostRecentFuelQuoteId:
-		database.update_all(
-			sqlite_orm::set(c(&Client::mostRecentFuelQuoteId) = mostRecentFuelQuoteId),
-			where(c(&Client::id) == id)
-		);
-		break;
-	}
+	this->*member = val;
+	database.update_all(
+		sqlite_orm::set(c(member) = this->*member), where(c(&Client::id) == id)
+	);
+}
+
+const void Client::update(unsigned Client::*member, unsigned val)
+{
+	this->*member = val;
+	database.update_all(
+		sqlite_orm::set(c(member) = this->*member), where(c(&Client::id) == id)
+	);
 }
 
 const json Client::toJson()
@@ -122,6 +106,12 @@ const json Client::toJson()
 		{"password",password},
 		{"clientLocation",clientLocation},
 		{"clientHistory",clientHistory},
+		{"fullName",fullName},
+		{"state",state},
+		{"city",city},
+		{"zipcode",zipcode},
+		{"address1",address1},
+		{"address2",address2},
 		{"mostRecentFuelQuoteId",mostRecentFuelQuoteId}
 	};
 }

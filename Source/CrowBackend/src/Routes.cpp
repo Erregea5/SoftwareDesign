@@ -22,18 +22,25 @@ namespace Routes {
         cout << "keys: ";
         for (auto& key : keys) {//find way to do it without looping
             if (key == "state") {
-                if(changes[key].s()=="TX"){
-                    client.clientLocation = ClientLocation(0);
-                }
-                else{
-                    client.clientLocation = ClientLocation(1);
-                }
-                client.updateDatabase(change::clientLocation);
+                unsigned loc = 1;
+                if(changes[key].s()=="TX")
+                    loc = 0;
+                client.update(&Client::clientLocation, loc);
+                client.update(&Client::state, changes[key].s());
             }
-            else if (key == "password") {
-                client.password = string(changes[key].s());
-                client.updateDatabase(change::password);
-            }
+            else if (key == "password") 
+                client.update(&Client::password, changes[key].s());
+            else if (key == "zipcode")
+                client.update(&Client::zipcode, changes[key].i());
+            else if (key == "city") 
+                client.update(&Client::city, changes[key].s());
+            else if (key == "fullName") 
+                client.update(&Client::fullName, changes[key].s());
+            else if (key == "address1") 
+                client.update(&Client::address1, changes[key].s());
+            else if (key == "address2") 
+                client.update(&Client::address2, changes[key].s());
+            
         }
         return client.toJson();
     }
