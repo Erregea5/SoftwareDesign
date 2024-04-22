@@ -1,6 +1,10 @@
-import { RouterProvider,createHashRouter } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 
 import "./components/shared/_reset.scss";
+
+import AuthProvider from "./components/authentication/AuthProvider";
+import ProtectedRoute from "./components/authentication/ProtectedRoute";
+import RedirectIfLoggedIn from "./components/authentication/RedirectIfLoggedIn";
 
 import History from "./components/history";
 import Home from "./components/home";
@@ -16,28 +20,32 @@ const router = createHashRouter([
   },
   {
     path: "/history",
-    element: <History />,
+    element: <ProtectedRoute children={<History />} />,
   },
   {
     path: "/login",
-    element: <Login />,
+    element: <RedirectIfLoggedIn children={<Login />} />,
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <ProtectedRoute children={<Profile />} />,
   },
   {
     path: "/quote",
-    element: <Quote />,
+    element: <ProtectedRoute children={<Quote />} />,
   },
   {
     path: "/register",
-    element: <Register />,
+    element: <RedirectIfLoggedIn children={<Register />} />,
   },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

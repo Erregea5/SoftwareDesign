@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   faCircleUser,
@@ -10,11 +10,14 @@ import AuthPage from "../shared/AuthPage";
 import Button from "../shared/Button";
 import Input from "../shared/Input";
 
+import AuthContext from "../authentication/AuthContext";
 import { attemptRegister } from "../../communication";
 
 export default function Register() {
+  const { login } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -25,13 +28,13 @@ export default function Register() {
       .then((data) => {
         if (data.error) alert(data.error);
         else {
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
+          login(username, password);
           navigate("/profile");
         }
       })
       .then(() => setIsLoading(false));
   };
+
   const children = (
     <form className={styles.form} onSubmit={handleSubmit}>
       <Input
@@ -86,6 +89,7 @@ export default function Register() {
       />
     </form>
   );
+
   return (
     <AuthPage
       heading="Client Registration"
