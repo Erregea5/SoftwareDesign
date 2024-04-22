@@ -73,9 +73,6 @@ const Profile = () => {
   };
 
   const handleFormSubmit = (e) => {
-    console.log(localStorage["username"]);
-    console.log(localStorage["password"]);
-
     e.preventDefault();
     const errors = {};
     let hasError = false;

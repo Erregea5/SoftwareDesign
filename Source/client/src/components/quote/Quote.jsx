@@ -12,7 +12,7 @@ const Quote = () => {
     const fetchData = async () => {
       try {
         const data = await manageProfile({});
-        console.log("Profile data: ", data.clientLocation);
+        console.log("Data:", data);
         // Update delivery address based on clientLocation
         if (data && data.clientLocation !== undefined) {
           const location = data.clientLocation === 0 ? "Texas" : "Out of State";

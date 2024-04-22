@@ -21,7 +21,11 @@ namespace Routes {
         auto keys = changes.keys();
         cout << "keys: ";
         for (auto& key : keys) {//find way to do it without looping
-            if (key == "state") {
+            if (key == "clientHistory") {
+                client.clientHistory = ClientHistory(changes[key].i());
+                client.updateDatabase(change::clientHistory);
+            }
+            else if (key == "clientLocation") {
                 if(changes[key].s()=="TX"){
                     client.clientLocation = ClientLocation(0);
                 }

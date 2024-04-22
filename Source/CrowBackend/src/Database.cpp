@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Database.h"
-#include <iostream>
-
 Storage make_Database() {
-    auto test = make_storage("db2.sqlite",
+    return make_storage("/home/ubuntu/SoftwareDesign/Source/CrowBackend/db.sqlite",
         make_table("Clients",
             make_column("Client_ID", &Client::id, primary_key().autoincrement()),
             make_column("Username", &Client::username, unique()),
@@ -24,7 +22,4 @@ Storage make_Database() {
             foreign_key(&FuelQuote::clientId).references(&Client::id)
         )
     );
-    std::cout << "sigma";
-    test.sync_schema();
-    return test;
 }
