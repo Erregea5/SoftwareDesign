@@ -4,7 +4,7 @@ for /f "delims=" %%a in ('call getAbsolute "../dependencies/Crow/include"') do s
 for /f "delims=" %%a in ('call getAbsolute "../dependencies/asio/include"') do set "asio=%%a"
 for /f "delims=" %%a in ('call getAbsolute "../dependencies/sqlite3/include"') do set "sqlite=%%a"
 for /f "delims=" %%a in ('call getAbsolute "../dependencies/sqlite_orm/include"') do set "sqlite_orm=%%a"
-g++.exe -D TEST -fdiagnostics-color=always -fprofile-arcs -ftest-coverage -g test.cpp ..\src\server.cpp ..\src\Client.cpp ..\src\FuelQuote.cpp ..\src\Routes.cpp ..\src\pch.cpp ..\dependencies\sqlite3\include\sqlite3.c -o test.exe -I%catch% -I%asio% -I%crow% -I%sqlite% -I%sqlite_orm% -pthread -lwsock32 -lws2_32
+g++.exe -D TEST -fdiagnostics-color=always -fprofile-arcs -ftest-coverage -fpermissive -g test.cpp ..\src\server.cpp ..\src\Client.cpp ..\src\FuelQuote.cpp ..\src\Routes.cpp ..\src\pch.cpp ..\dependencies\sqlite3\include\sqlite3.o -o test.exe -I%catch% -I%asio% -I%crow% -I%sqlite% -I%sqlite_orm% -pthread -lwsock32 -lws2_32 -ldl
 test.exe
 @REM gcov test.cpp -r -o test-server -n
 

@@ -1,4 +1,5 @@
 download asio, Crow, Catch2, sqlite3, and sqlite3_orm include source and place include folder in dependencies for each
+if you're on linux you can apt install libsqlite3-dev
 ```c
 -Crow
   |

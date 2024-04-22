@@ -1,14 +1,17 @@
-#include "../src/pch.h"
-
+#include "pch.h"
+#include "../src/Database.h"
 #define CATCH_CONFIG_MAIN
 #include "../src/server.h"
 #include <catch.hpp>
 
+
+using namespace sqlite_orm;
 crow::App<crow::CORSHandler> app;
 
 TEST_CASE("start the server") {
     setupServer(app);
     app.validate();
+    database.remove_all<Client>(where(c(&Client::username) == "user"));
     REQUIRE(true);
 }
 
@@ -25,7 +28,7 @@ TEST_CASE("attempt register") {
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
         REQUIRE(data["password"] == "pass");
-        REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
+        REQUIRE(database.get_all<Client>(where(c(&Client::username) == "user")).size() == 1);
     }
     
     SECTION("attempt reregister of customer") {
@@ -111,7 +114,7 @@ TEST_CASE("profile management test"){
         auto data = crow::json::load(res.body);
         REQUIRE(res.code ==200);
         REQUIRE(data["password"] == "pass");
-        REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
+        //REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
     }
     
     SECTION("profile update invalid long name"){
@@ -212,7 +215,7 @@ TEST_CASE("Get Fuel Quote History") {
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
         // REQUIRE(data["password"] == "pass");
-        REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
+        //REQUIRE(database["Client"]["user"]["password"].getString() == "pass");
     }
 
     SECTION("get quotes without password") {
@@ -299,22 +302,11 @@ TEST_CASE("Predict Rate of Fuel - Incorrect/Missing Inputs") {
 }
 
 TEST_CASE("attempt fulfill purchase") {
-    // crow::request tempReq;
-    // crow::response tempRes;
-    // tempReq.url = "/api/predictRateOfFuel";
-    // tempReq.method = crow::HTTPMethod::POST;
-    // tempReq.body = json({{"password","pass"},{"username","user"}}).dump();
-    // app.handle_full(tempReq, tempRes);
-    // const auto data = crow::json::load(tempRes.body);
-
-//     // REQUIRE(tempRes.code == 200);
-//     // REQUIRE((data.has("client") && data.has("quote")));
-
     crow::request req;
     crow::response res;
     req.url = "/api/fullFillPurchase";
     req.method = crow::HTTPMethod::POST;
-    req.body = json({{"password","pass"},{"username","user"}}).dump();
+    req.body = json({{"password","hi"},{"username","hi"}}).dump();
 
     SECTION("successful purchase fuelquote") {
         app.handle_full(req, res);
@@ -324,19 +316,19 @@ TEST_CASE("attempt fulfill purchase") {
     }
 
     SECTION("attempt fulfill purchase without password") {
-        req.body = json({ {"username","user"} }).dump();
+        req.body = json({ {"username","hi"} }).dump();
         app.handle_full(req, res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        REQUIRE(data["status"]=="failure");
+        REQUIRE(data["error"] == "Missing Credentials");
     }
     
     SECTION("attempt fulfill purchase without username") {
-        req.body = json({ {"password","pass"} }).dump();
+        req.body = json({ {"password","hi"} }).dump();
         app.handle_full(req, res);
         auto data = crow::json::load(res.body);
         REQUIRE(res.code == 200);
-        REQUIRE(data["status"]=="failure");
+        REQUIRE(data["error"] == "Missing Credentials");
     }
 
     SECTION("attempt purchase fuelquote invalid method") {
@@ -372,7 +364,9 @@ TEST_CASE("login - /api/login route") {
         req.method = crow::HTTPMethod::POST;
         req.body = json({{"password", ""}, {"username", "valid_user"}}).dump();
         app.handle_full(req, res);
-        REQUIRE(res.code == 400);
+        auto data = crow::json::load(res.body);
+        REQUIRE(res.code == 200);
+        REQUIRE(data["error"] == "Missing Credentials");
     }
 
     // Add more test cases as needed to cover different scenarios

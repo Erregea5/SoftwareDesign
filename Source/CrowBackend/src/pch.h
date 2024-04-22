@@ -1,6 +1,7 @@
 #ifndef _______________________________________________1
 #define _______________________________________________1
 #define SQLITE_ENABLE_COLUMN_METADATA
+#define SQLITE_CUSTOM_INCLUDE "sqlite3.h"
 #include <crow.h>
 #include <crow/middlewares/cors.h>
 #include <sqlite_orm.h>
