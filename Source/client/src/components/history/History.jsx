@@ -3,21 +3,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
   faChevronDown,
-  faCaretDown,
   faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./History.module.scss";
 import { getFuelQuoteHistory, fullfillPurchase } from "../../communication";
 
-import NavBar from "./NavBar";
+const SORT_COLUMNS = Object.freeze({
+  GALLONS_REQUESTED: "gallonsRequested",
+  UNIT_RATE_QUOTE: "unitRateQuote",
+  TOTAL_AMOUNT_DUE: "totalAmountDue",
+  REQUEST_DATE: "requestDate",
+  PURCHASE_DATE: "purchaseDate",
+});
+
+const SORT_ORDER = Object.freeze({
+  ASCENDING: "ascending",
+  DESCENDING: "descending",
+});
+
+const SEARCHABLE_CLASS_NAME = "searchable";
 
 function Row({
   clientLocation,
   gallonsRequested,
-  companyProfitMargin,
-  rate: unitRate,
-  date: requestDate,
-  purchasedDate,
+  unitRateQuote,
+  totalAmountDue,
+  requestDate,
+  purchaseDate,
 }) {
   const formatDateAndTime = (dateString) => {
     if (!dateString || dateString === "null")
@@ -41,55 +53,71 @@ function Row({
   const formattedRequestDate = formatDateAndTime(requestDate).formattedDate;
   const formattedRequestTime = formatDateAndTime(requestDate).formattedTime;
 
-  const formattedPurchaseDate = formatDateAndTime(purchasedDate).formattedDate;
-  const formattedPurchaseTime = formatDateAndTime(purchasedDate).formattedTime;
+  const formattedPurchaseDate = formatDateAndTime(purchaseDate).formattedDate;
+  const formattedPurchaseTime = formatDateAndTime(purchaseDate).formattedTime;
 
   const status =
-    !purchasedDate || purchasedDate === "null" ? "Pending" : "Fulfilled";
+    !purchaseDate || purchaseDate === "null" ? "Pending" : "Fulfilled";
 
   return (
     <tr>
       <td>
-        <div className={`${styles.searchable} ${styles.pre}`}>
+        <div
+          className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
+        >
           {clientLocation ? "In State" : "Out-Of-State"}
         </div>
       </td>
       <td>
-        <pre className={`${styles.searchable} ${styles.pre}`}>
+        <pre
+          className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
+        >
           {gallonsRequested} gal
         </pre>
       </td>
       <td>
-        <pre className={`${styles.searchable} ${styles.pre}`}>
-          {companyProfitMargin}%
+        <pre
+          className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
+        >
+          ${unitRateQuote}/gal
         </pre>
       </td>
       <td>
-        <pre className={`${styles.searchable} ${styles.pre}`}>
-          ${unitRate}/gal
+        <pre
+          className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
+        >
+          ${totalAmountDue}
         </pre>
       </td>
       <td>
-        <div className={`${styles.searchable} ${styles.date}`}>
+        <div
+          className={`${styles.searchable} ${styles.date} ${SEARCHABLE_CLASS_NAME}`}
+        >
           {formattedRequestDate}
         </div>
-        <div className={`${styles.searchable} ${styles.time}`}>
+        <div
+          className={`${styles.searchable} ${styles.time} ${SEARCHABLE_CLASS_NAME}`}
+        >
           {formattedRequestTime}
         </div>
       </td>
       <td>
-        <div className={`${styles.searchable} ${styles.date}`}>
+        <div
+          className={`${styles.searchable} ${styles.date} ${SEARCHABLE_CLASS_NAME}`}
+        >
           {formattedPurchaseDate}
         </div>
-        <div className={`${styles.searchable} ${styles.time}`}>
+        <div
+          className={`${styles.searchable} ${styles.time} ${SEARCHABLE_CLASS_NAME}`}
+        >
           {formattedPurchaseTime}
         </div>
       </td>
       <td>
         <span
-          className={`${styles.searchable} ${styles.status} ${
-            styles[status.toLowerCase()]
-          }`}
+          className={`${styles.searchable} ${
+            styles.status
+          }  ${SEARCHABLE_CLASS_NAME} ${styles[status.toLowerCase()]}`}
         >
           {status}
         </span>
@@ -98,12 +126,30 @@ function Row({
   );
 }
 
+const parseFuelQuoteHistory = (data) => {
+  return data.map((row) => {
+    return {
+      clientLocation: row.clientLocation,
+      gallonsRequested: row.gallonsRequested,
+      unitRateQuote: row.rate,
+      totalAmountDue: row.gallonsRequested * row.rate,
+      requestDate: row.date,
+      purchaseDate: row.purchasedDate,
+    };
+  });
+};
+
 export default function History() {
-  const [data, setData] = useState([]);
+  const [fuelQuoteHistory, setFuelQuoteHistory] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortColumn, setSortColumn] = useState(SORT_COLUMNS.INITIATED);
+  const [sortOrder, setSortOrder] = useState(SORT_ORDER.DESCENDING);
 
   const fetchData = async () => {
-    getFuelQuoteHistory().then((val) => {
-      if (val && val.length) setData(val);
+    getFuelQuoteHistory().then((data) => {
+      if (data?.length) {
+        setFuelQuoteHistory(parseFuelQuoteHistory(data));
+      }
     });
   };
 
@@ -113,107 +159,189 @@ export default function History() {
     return () => (document.body.style.backgroundColor = "");
   }, []);
 
+  useEffect(() => {
+    const searchables = Array.from(
+      document.getElementsByClassName(SEARCHABLE_CLASS_NAME)
+    );
+    searchables.forEach((element) => {
+      // Use regular expression with the "gi" flag to match all occurrences
+      // and replace them with the same text but wrapped in a span with a
+      // background color. "g" means global and "i" means case insensitive.
+      const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(escapeRegExp(searchQuery.trim()), "gi");
+      const cellText = element.textContent;
+      element.innerHTML = cellText.replace(
+        regex,
+        (match) => `<span class=${styles.highlighted}>${match}</span>`
+      );
+    });
+  }, [searchQuery]);
+
+  const filterData = (packages, searchQuery) => {
+    searchQuery = searchQuery.trim().toLowerCase();
+    return packages.filter((p) => {
+      return Object.keys(p).some((key) => {
+        const itemValue = String(p[key]).toLowerCase();
+        return itemValue.includes(searchQuery);
+      });
+    });
+  };
+
+  const sortData = (fuelQuoteHistory, column, order) => {
+    const ascending = order === SORT_ORDER.ASCENDING;
+    return [...fuelQuoteHistory].sort((a, b) => {
+      if (column === SORT_COLUMNS.REQUEST_DATE) {
+        return ascending
+          ? new Date(a[column]) - new Date(b[column])
+          : new Date(b[column]) - new Date(a[column]);
+      } else if (column === SORT_COLUMNS.PURCHASE_DATE) {
+        if (a[column] === "null") {
+          return ascending ? 1 : -1;
+        } else if (b[column] === "null") {
+          return ascending ? -1 : 1;
+        }
+        return ascending
+          ? new Date(a[column]) - new Date(b[column])
+          : new Date(b[column]) - new Date(a[column]);
+      }
+      // // For other columns, use the default comparison
+      const sort = ascending ? a[column] > b[column] : a[column] < b[column]; // Returns a boolean
+      return sort ? 1 : -1; // Sort needs a signed integer to determine order
+    });
+  };
+
+  const filtered = filterData(fuelQuoteHistory, searchQuery);
+  const filteredSorted = sortData(filtered, sortColumn, sortOrder);
+
+  const handleExport = () => {
+    const jsonString = JSON.stringify(filteredSorted, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+
+    // Create a download link
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = "Packages.json";
+
+    // Add link, click it, and remove it from DOM
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+
   const handleBuy = () => {
-    fullfillPurchase().then(() => fetchData());
+    if (!window.confirm("Are you sure you want to purchase the most recent?"))
+      return;
+
+    if (!fuelQuoteHistory.length)
+      return alert("There are no fuel quotes to purchase.");
+
+    const mostRecent = fuelQuoteHistory[fuelQuoteHistory.length - 1];
+    if (mostRecent.purchaseDate !== "null")
+      return alert("The most recent fuel quote has already been purchased.");
+
+    fullfillPurchase().then(() => {
+      alert("Purchase successful!");
+      fetchData();
+    });
   };
 
   return (
-    <>
-      <NavBar />
-      <main id={styles.container}>
-        <div id={styles.top}>
-          <h1 id={styles.heading}>Welcome back, {localStorage["username"]}</h1>
-          <button id={styles.switch} onClick={handleBuy}>
-            <FontAwesomeIcon icon={faMoneyCheckDollar} />
-            Buy Most Recent
-          </button>
+    <main id={styles.container}>
+      <div id={styles.top}>
+        <h1 id={styles.heading}>Welcome back, {localStorage["username"]}</h1>
+        <button id={styles.switch} onClick={handleBuy}>
+          <FontAwesomeIcon icon={faMoneyCheckDollar} />
+          Buy Most Recent
+        </button>
+      </div>
+      <section id={styles.controls} className={styles.section}>
+        <p id={styles.searchText} className={styles.label}>
+          What are you searching for?
+        </p>
+        <p id={styles.sortText} className={styles.label}>
+          Sort By
+        </p>
+        <p id={styles.orderText} className={styles.label}>
+          Order
+        </p>
+        <div id={styles.searchContainer}>
+          <FontAwesomeIcon icon={faSearch} id={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search by any field"
+            autoComplete="off"
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-        <section id={styles.controls} className={styles.section}>
-          <p id={styles.searchText} className={styles.label}>
-            What are you searching for?
-          </p>
-          <p id={styles.sortText} className={styles.label}>
-            Sort By
-          </p>
-          <p id={styles.orderText} className={styles.label}>
-            Order
-          </p>
-          <div id={styles.searchContainer}>
-            <FontAwesomeIcon icon={faSearch} id={styles.searchIcon} />
-            <input
-              type="text"
-              placeholder="Search by any field FIXME"
-              autocomplete="off"
-              tabindex="1"
-            />
-          </div>
-          <div id={styles.columnContainer} className={styles.dropdownContainer}>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className={styles.chevronDownIcon}
-            />
-            <select id={styles.sortColumn} tabindex="2">
-              <option value="">1 FIXME</option>
-              <option value="">2 FIXME</option>
-              <option value="">3 FIXME</option>
-              <option value="">4 FIXME</option>
-              <option value="">5 FIXME</option>
-              <option selected value="">
-                6 FIXME
-              </option>
-            </select>
-          </div>
-          <div id={styles.orderContainer} className={styles.dropdownContainer}>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className={styles.chevronDownIcon}
-            />
-            <select id={styles.sortOrder} tabindex="3">
-              <option value="0">Descending FIXME</option>
-              <option value="1">Ascending FIXME</option>
-            </select>
-          </div>
-          <button id={styles.export} tabindex="4">
-            Export JSON FIXME
-          </button>
-        </section>
-        <section id={styles.outerTableContainer} className={styles.section}>
-          <div id={styles.innerTableContainer}>
-            <table id={styles.table}>
-              <thead>
-                <tr>
-                  <th>Location</th>
-                  <th>Gallons Requested</th>
-                  <th>Profit Margin</th>
-                  <th>Unit Rate</th>
-                  <th>Request Date</th>
-                  <th>Purchase Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row, i) => (
-                  <Row key={i} {...row} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-        <section id={styles.pagination} className={styles.section}>
-          <p id={styles.records}>Loading... FIXME</p>
-          <div id={styles.recordSize}>
-            <p>Showing FIXME</p>
-            <div id={styles.recordsDropdownContainer}>
-              <FontAwesomeIcon icon={faCaretDown} id={styles.caretDownIcon} />
-              <select id={styles.logsLimit}>
-                <option value="10">10</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-              </select>
-            </div>
-          </div>
-        </section>
-      </main>
-    </>
+        <div id={styles.columnContainer} className={styles.dropdownContainer}>
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            className={styles.chevronDownIcon}
+          />
+          <select
+            id={styles.sortColumn}
+            onChange={(e) => setSortColumn(e.target.value)}
+          >
+            <option value={SORT_COLUMNS.CLIENT_LOCATION}>
+              Client Location
+            </option>
+            <option value={SORT_COLUMNS.GALLONS_REQUESTED}>
+              Gallons Requested
+            </option>
+            <option value={SORT_COLUMNS.UNIT_RATE_QUOTE}>
+              Unit Rate Quote
+            </option>
+            <option value={SORT_COLUMNS.TOTAL_AMOUNT_DUE}>
+              Total Amount Due
+            </option>
+            <option value={SORT_COLUMNS.REQUEST_DATE} selected>
+              Request Date
+            </option>
+            <option value={SORT_COLUMNS.PURCHASE_DATE}>Purchase Date</option>
+          </select>
+        </div>
+        <div
+          id={styles.orderContainer}
+          className={styles.dropdownContainer}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            className={styles.chevronDownIcon}
+          />
+          <select id={styles.sortOrder}>
+            <option value={SORT_ORDER.ASCENDING}>Ascending</option>
+            <option value={SORT_ORDER.DESCENDING} selected>
+              Descending
+            </option>
+          </select>
+        </div>
+        <button id={styles.export} onClick={handleExport}>
+          Export JSON
+        </button>
+      </section>
+      <section id={styles.outerTableContainer} className={styles.section}>
+        <div id={styles.innerTableContainer}>
+          <table id={styles.table}>
+            <thead>
+              <tr>
+                <th>Client Location</th>
+                <th>Gallons Requested</th>
+                <th>Unit Rate Quote</th>
+                <th>Total Amount Due</th>
+                <th>Request Date</th>
+                <th>Purchase Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredSorted.map((row, i) => (
+                <Row key={i} {...row} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   );
 }

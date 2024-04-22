@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { faUserCircle, faLock } from "@fortawesome/free-solid-svg-icons";
 import { styles } from "../shared/AuthPageRight";
@@ -6,11 +6,14 @@ import AuthPage from "../shared/AuthPage";
 import Button from "../shared/Button";
 import Input from "../shared/Input";
 
+import AuthContext from "../authentication/AuthContext";
 import { attemptLogin } from "../../communication";
 
 export default function Login() {
+  const { login } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -20,13 +23,13 @@ export default function Login() {
       .then((data) => {
         if (data.error) alert(data.error);
         else {
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
+          login(username, password);
           navigate("/profile");
         }
       })
       .then(() => setIsLoading(false));
   };
+
   const form = (
     <form className={styles.form} onSubmit={handleSubmit}>
       <Input
@@ -56,6 +59,7 @@ export default function Login() {
       />
     </form>
   );
+
   return (
     <AuthPage
       heading="Welcome Back"
