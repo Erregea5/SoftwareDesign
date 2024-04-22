@@ -26,7 +26,12 @@ namespace Routes {
                 client.updateDatabase(change::clientHistory);
             }
             else if (key == "clientLocation") {
-                client.clientLocation = ClientLocation(changes[key].i());
+                if(changes[key].s()=="TX"){
+                    client.clientLocation = ClientLocation(0);
+                }
+                else{
+                    client.clientLocation = ClientLocation(1);
+                }
                 client.updateDatabase(change::clientLocation);
             }
             else if (key == "password") {
