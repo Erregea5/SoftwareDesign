@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker"; // Import the datepicker component
 import "react-datepicker/dist/react-datepicker.css"; // Import datepicker styles
 import QuoteResult from "./QuoteResult";
 import "../Quote.css";
 
-const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
-  const [gallonsRequested, setGallonsRequested] = useState("");
+const FuelQuoteForm = ({
+  deliveryAddress,
+  handleSubmit,
+  suggestedPrice,
+  gallonsRequested,
+  setGallonsRequested,
+}) => {
   const [deliveryDate, setDeliveryDate] = useState(new Date()); // Initialize deliveryDate state with current date
-  const [companyProfitMargin, setCompanyProfitMargin] = useState(""); // State for company profit margin
-  const [suggestedPrice, setSuggestedPrice] = useState(-1);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false); // State to control visibility of the calendar
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (gallonsRequested && deliveryDate && companyProfitMargin) {
-      // Check if company profit margin is provided
-      handleSubmit(gallonsRequested, deliveryDate, companyProfitMargin); // Pass company profit margin to handleSubmit
-      setSuggestedPrice(3 * gallonsRequested); // Mock price, change as needed
+    if (gallonsRequested && deliveryDate) {
+      handleSubmit(gallonsRequested, deliveryDate);
       setFormSubmitted(true);
     }
   };
@@ -25,14 +26,19 @@ const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
   const handleResetForm = () => {
     setGallonsRequested("");
     setDeliveryDate(new Date()); // Reset deliveryDate to current date
-    setCompanyProfitMargin("");
-    setSuggestedPrice(-1);
     setFormSubmitted(false);
   };
 
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar); // Toggle the visibility of the calendar
   };
+
+  useEffect(() => {
+    // Update gallonsRequested when suggestedPrice changes
+    if (suggestedPrice !== -1 && gallonsRequested === "") {
+      setGallonsRequested("1"); // Set a default value for gallonsRequested if it's empty
+    }
+  }, [suggestedPrice, gallonsRequested, setGallonsRequested]);
 
   return (
     <>
@@ -45,17 +51,6 @@ const FuelQuoteForm = ({ deliveryAddress, handleSubmit }) => {
               type="number"
               value={gallonsRequested}
               onChange={(e) => setGallonsRequested(e.target.value)}
-              required
-              className="input"
-            />
-          </div>
-          <div className="input-container">
-            <label className="label">Company Profit Margin:</label>{" "}
-            {/* Add input field for company profit margin */}
-            <input
-              type="number"
-              value={companyProfitMargin}
-              onChange={(e) => setCompanyProfitMargin(e.target.value)}
               required
               className="input"
             />

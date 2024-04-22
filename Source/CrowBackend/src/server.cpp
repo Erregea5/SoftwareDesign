@@ -27,7 +27,7 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
         .methods("POST"_method)(
             [](const crow::request& req) {
                 Auth auth(req);
-                if (auth.empty)
+                if (auth.empty || auth.username == "" || auth.password == "")
                     return crow::response(MISSING_CREDENTIALS);
                 return crow::response(Routes::login(auth.username, auth.password).dump());
             });
@@ -36,8 +36,7 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
         .methods("POST"_method)(
             [](const crow::request& req) {
                 Auth auth(req);
-                cout<<(auth.empty?"sad":"happy")<<endl;
-                if (auth.empty)
+                if (auth.empty || auth.username == "" || auth.password == "")
                     return crow::response(MISSING_CREDENTIALS);
                 return crow::response(Routes::_register(auth.username, auth.password).dump());
             });
@@ -108,7 +107,7 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
             );
         });
 }
-
+#define TEST
 #ifndef TEST
 int main() {
     crow::App<crow::CORSHandler> app;

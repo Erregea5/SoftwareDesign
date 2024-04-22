@@ -31,12 +31,12 @@ function getFuelQuoteHistory() {
   });
 }
 
-function predictRateOfFuel(gallonsRequested, companyProfitMargin) {
+function predictRateOfFuel(gallonsRequested) {
   return postData("predictRateOfFuel", {
     username: localStorage["username"],
     password: localStorage["password"],
     gallonsRequested,
-    companyProfitMargin,
+    companyProfitMargin: 0.1, // default company profit margin
   });
 }
 
