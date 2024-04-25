@@ -2,7 +2,7 @@
 #include "Database.h"
 
 Client::Client(const string& username, const string& password,bool loggingIn)
-	: username(username), password(password), id(0), clientHistory(0), clientLocation(0),mostRecentFuelQuoteId(0)
+	: username(username), password(password), id(0), clientLocation(0),mostRecentFuelQuoteId(0)
 {
 	auto rows = database.get_all<Client>(where(c(&Client::username) == username));
 	cout<<rows.size()<<username<<endl;
@@ -39,7 +39,13 @@ Client::Client(const string& username, const string& password,bool loggingIn)
 	loggedIn = true;
 	id = rows[0].id;
 	clientLocation = rows[0].clientLocation;
-	clientHistory = rows[0].clientHistory;
+	mostRecentFuelQuoteId = rows[0].mostRecentFuelQuoteId;
+	fullName = rows[0].fullName;
+	state = rows[0].state;
+	city = rows[0].city;
+	zipcode = rows[0].zipcode;
+	address1 = rows[0].address1;
+	address2 = rows[0].address2;
 	mostRecentFuelQuoteId = rows[0].mostRecentFuelQuoteId;
 }
 
@@ -105,7 +111,6 @@ const json Client::toJson()
 		{"id",id},
 		{"password",password},
 		{"clientLocation",clientLocation},
-		{"clientHistory",clientHistory},
 		{"fullName",fullName},
 		{"state",state},
 		{"city",city},

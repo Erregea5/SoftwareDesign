@@ -10,7 +10,6 @@ public:
     std::string username;
     std::string password;
     unsigned clientLocation;
-    unsigned clientHistory;
     unsigned mostRecentFuelQuoteId; // Foreign key "pointing" to a `FuelQuote`'s `id`
     std::string fullName;
     unsigned zipcode;
