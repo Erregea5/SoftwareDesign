@@ -1,23 +1,16 @@
 # SoftwareDesign
 
-### Severe
+### Notes
 
-* Test cases for calculation
-* Password must be encrypted
-* Are we even using delivery date?
-
-### Low Priority
-
-* Time zone is off
-* Store client info in local storage
-* Searching highlights are buggy
+* Time zone is off when purchasing. This is probably due to the server being in a different time zone than the client.
+* Searching highlights are buggy.
 
 ### Reminders
 
-* DO NOT WIPE DB OR ELSE TEST CASES WILL FAIL
+* Don't completely wipe database or else some test cases will fail.
 * Cloning:
-  * Copy dependencies
-  * Change absolute path in `Database.cpp`
+  * Copy dependencies.
+  * Change absolute path in `Database.cpp`.
 * Hosting:
-    * Write down pm2 IDs
-    * Use environment variables for ports and server url
+    * Write down pm2 IDs.
+    * Use environment variables for ports and server url.

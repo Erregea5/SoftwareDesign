@@ -9,10 +9,12 @@ import styles from "./History.module.scss";
 import { getFuelQuoteHistory, fullfillPurchase } from "../../communication";
 
 const SORT_COLUMNS = Object.freeze({
+  QUOTE_NUMBER: "id",
+  CLIENT_LOCATION: "clientLocation",
   GALLONS_REQUESTED: "gallonsRequested",
   UNIT_RATE_QUOTE: "unitRateQuote",
   TOTAL_AMOUNT_DUE: "totalAmountDue",
-  REQUEST_DATE: "requestDate",
+  DELIVERY_DATE: "deliveryDate",
   PURCHASE_DATE: "purchaseDate",
 });
 
@@ -24,11 +26,12 @@ const SORT_ORDER = Object.freeze({
 const SEARCHABLE_CLASS_NAME = "searchable";
 
 function Row({
+  id,
   clientLocation,
   gallonsRequested,
   unitRateQuote,
   totalAmountDue,
-  requestDate,
+  deliveryDate,
   purchaseDate,
   status,
 }) {
@@ -51,14 +54,21 @@ function Row({
     return { formattedDate, formattedTime };
   };
 
-  const formattedRequestDate = formatDateAndTime(requestDate).formattedDate;
-  const formattedRequestTime = formatDateAndTime(requestDate).formattedTime;
+  const formattedDeliveryDate = formatDateAndTime(deliveryDate).formattedDate;
+  const formattedDeliveryTime = formatDateAndTime(deliveryDate).formattedTime;
 
   const formattedPurchaseDate = formatDateAndTime(purchaseDate).formattedDate;
   const formattedPurchaseTime = formatDateAndTime(purchaseDate).formattedTime;
 
   return (
     <tr>
+      <td>
+        <div
+          className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
+        >
+          {id}
+        </div>
+      </td>
       <td>
         <div
           className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
@@ -77,26 +87,26 @@ function Row({
         <pre
           className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
         >
-          ${unitRateQuote}/gal
+          ${unitRateQuote.toFixed(2)}/gal
         </pre>
       </td>
       <td>
         <pre
           className={`${styles.searchable} ${styles.pre} ${SEARCHABLE_CLASS_NAME}`}
         >
-          ${totalAmountDue}
+          ${totalAmountDue.toFixed(2)}
         </pre>
       </td>
       <td>
         <div
           className={`${styles.searchable} ${styles.date} ${SEARCHABLE_CLASS_NAME}`}
         >
-          {formattedRequestDate}
+          {formattedDeliveryDate}
         </div>
         <div
           className={`${styles.searchable} ${styles.time} ${SEARCHABLE_CLASS_NAME}`}
         >
-          {formattedRequestTime}
+          {formattedDeliveryTime}
         </div>
       </td>
       <td>
@@ -113,9 +123,8 @@ function Row({
       </td>
       <td>
         <span
-          className={`${styles.searchable} ${
-            styles.status
-          }  ${SEARCHABLE_CLASS_NAME} ${styles[status.toLowerCase()]}`}
+          className={`${styles.searchable} ${styles.status
+            }  ${SEARCHABLE_CLASS_NAME} ${styles[status.toLowerCase()]}`}
         >
           {status}
         </span>
@@ -128,13 +137,14 @@ const parseFuelQuoteHistory = (data) => {
   return data.map((row, index) => {
     const status =
       (row.purchasedDate !== "null") ? "Fulfilled" :
-      (index == data.length - 1) ? "Pending" : "Expired";
+        (index == data.length - 1) ? "Pending" : "Expired";
     return {
+      id: row.id,
       clientLocation: row.clientLocation,
       gallonsRequested: row.gallonsRequested,
       unitRateQuote: row.rate,
       totalAmountDue: row.gallonsRequested * row.rate,
-      requestDate: row.date,
+      deliveryDate: row.deliveryDate,
       purchaseDate: row.purchasedDate,
       status,
     };
@@ -144,7 +154,7 @@ const parseFuelQuoteHistory = (data) => {
 export default function History() {
   const [fuelQuoteHistory, setFuelQuoteHistory] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortColumn, setSortColumn] = useState(SORT_COLUMNS.INITIATED);
+  const [sortColumn, setSortColumn] = useState(SORT_COLUMNS.QUOTE_NUMBER);
   const [sortOrder, setSortOrder] = useState(SORT_ORDER.DESCENDING);
 
   const fetchData = async () => {
@@ -192,7 +202,7 @@ export default function History() {
   const sortData = (fuelQuoteHistory, column, order) => {
     const ascending = order === SORT_ORDER.ASCENDING;
     return [...fuelQuoteHistory].sort((a, b) => {
-      if (column === SORT_COLUMNS.REQUEST_DATE) {
+      if (column === SORT_COLUMNS.DELIVERY_DATE) {
         return ascending
           ? new Date(a[column]) - new Date(b[column])
           : new Date(b[column]) - new Date(a[column]);
@@ -222,7 +232,7 @@ export default function History() {
     // Create a download link
     const downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = "Packages.json";
+    downloadLink.download = "FuelQuotes.json";
 
     // Add link, click it, and remove it from DOM
     document.body.appendChild(downloadLink);
@@ -284,6 +294,9 @@ export default function History() {
             id={styles.sortColumn}
             onChange={(e) => setSortColumn(e.target.value)}
           >
+            <option value={SORT_COLUMNS.QUOTE_NUMBER} selected>
+              Quote #
+            </option>
             <option value={SORT_COLUMNS.CLIENT_LOCATION}>
               Client Location
             </option>
@@ -296,8 +309,8 @@ export default function History() {
             <option value={SORT_COLUMNS.TOTAL_AMOUNT_DUE}>
               Total Amount Due
             </option>
-            <option value={SORT_COLUMNS.REQUEST_DATE} selected>
-              Request Date
+            <option value={SORT_COLUMNS.DELIVERY_DATE}>
+              Delivery Date
             </option>
             <option value={SORT_COLUMNS.PURCHASE_DATE}>Purchase Date</option>
           </select>
@@ -327,11 +340,12 @@ export default function History() {
           <table id={styles.table}>
             <thead>
               <tr>
+                <th>Quote #</th>
                 <th>Client Location</th>
                 <th>Gallons Requested</th>
                 <th>Unit Rate Quote</th>
                 <th>Total Amount Due</th>
-                <th>Request Date</th>
+                <th>Delivery Date</th>
                 <th>Purchase Date</th>
                 <th>Status</th>
               </tr>

@@ -50,7 +50,7 @@ body {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.submit-button {
+.start-over {
   align-self: flex-end;
   padding: 8px 16px;
   border: none;
@@ -63,8 +63,26 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-.submit-button:hover {
+.start-over:hover {
   background-color: #6a0dad;
+}
+
+.buy-now {
+  margin-left: 12px;
+  align-self: flex-end;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgb(30, 86, 138);
+  color: white;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.buy-now:hover {
+  background-color: rgb(14, 131, 199);
 }
 
 /* Additional Styles for Calendar */

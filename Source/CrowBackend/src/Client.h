@@ -10,7 +10,6 @@ public:
     std::string username;
     std::string password;
     unsigned clientLocation;
-    unsigned clientHistory;
     unsigned mostRecentFuelQuoteId; // Foreign key "pointing" to a `FuelQuote`'s `id`
     std::string fullName;
     unsigned zipcode;
@@ -19,7 +18,6 @@ public:
 public:
     Client() {}
     Client(const std::string& username, const std::string& password, bool loggingIn=true); // Will populate the rest of the fields by querying
-    const void addFuelQuote(const double rate, const time_t date);
     const FuelQuote getMostRecentFuelQuote() const;
     const bool buyFuel(); // Purchase the FuelQuote with `id` = `mostRecentFuelQuoteId` and set `purchasedDate` to `time(NULL)`
     std::vector<FuelQuote> getFuelQuoteHistory() const;

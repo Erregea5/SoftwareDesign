@@ -28,11 +28,14 @@ const Quote = () => {
   }, []);
 
   const handleSubmit = (gallonsRequested, deliveryDate) => {
-    console.log("Form submitted with gallonsRequested:", gallonsRequested);
-    console.log("Delivery date:", deliveryDate);
+    // console.log("Form submitted with gallonsRequested:", gallonsRequested);
+    // console.log("Delivery date:", deliveryDate);
 
-    predictRateOfFuel(parseFloat(gallonsRequested)).then((data) => {
-      console.log("Data: ", data);
+    predictRateOfFuel(
+      parseFloat(gallonsRequested),
+      deliveryDate,
+    ).then((data) => {
+      // console.log("Data: ", data);
 
       setSuggestedPrice(data.quote.rate);
       setGallonsRequested(data.quote.gallonsRequested);
@@ -43,11 +46,13 @@ const Quote = () => {
     <div className="card-container">
       <div className="card">
         <FuelQuoteForm
-          deliveryAddress={deliveryAddress} // Pass deliveryAddress here
-          handleSubmit={handleSubmit}
-          suggestedPrice={suggestedPrice}
-          gallonsRequested={gallonsRequested}
-          setGallonsRequested={setGallonsRequested}
+          {...{
+            deliveryAddress,
+            handleSubmit,
+            suggestedPrice,
+            gallonsRequested,
+            setGallonsRequested,
+          }}
         />
       </div>
     </div>

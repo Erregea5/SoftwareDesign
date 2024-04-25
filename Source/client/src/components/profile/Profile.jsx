@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
 
-import { manageProfile } from "../../communication";
+import { attemptLogin, manageProfile } from "../../communication";
+
+import statesList from "./statesList.json";
 
 const Profile = () => {
   const [fullName, setFullName] = useState("");
@@ -13,63 +15,28 @@ const Profile = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Define the list of states
-  const statesList = [
-    { value: "", label: "Select State" },
-    { value: "AL", label: "Alabama" },
-    { value: "AK", label: "Alaska" },
-    { value: "AZ", label: "Arizona" },
-    { value: "AR", label: "Arkansas" },
-    { value: "CA", label: "California" },
-    { value: "CO", label: "Colorado" },
-    { value: "CT", label: "Connecticut" },
-    { value: "DE", label: "Delaware" },
-    { value: "FL", label: "Florida" },
-    { value: "GA", label: "Georgia" },
-    { value: "HI", label: "Hawaii" },
-    { value: "ID", label: "Idaho" },
-    { value: "IL", label: "Illinois" },
-    { value: "IN", label: "Indiana" },
-    { value: "IA", label: "Iowa" },
-    { value: "KS", label: "Kansas" },
-    { value: "KY", label: "Kentucky" },
-    { value: "LA", label: "Louisiana" },
-    { value: "ME", label: "Maine" },
-    { value: "MD", label: "Maryland" },
-    { value: "MA", label: "Massachusetts" },
-    { value: "MI", label: "Michigan" },
-    { value: "MN", label: "Minnesota" },
-    { value: "MS", label: "Mississippi" },
-    { value: "MO", label: "Missouri" },
-    { value: "MT", label: "Montana" },
-    { value: "NE", label: "Nebraska" },
-    { value: "NV", label: "Nevada" },
-    { value: "NH", label: "New Hampshire" },
-    { value: "NJ", label: "New Jersey" },
-    { value: "NM", label: "New Mexico" },
-    { value: "NY", label: "New York" },
-    { value: "NC", label: "North Carolina" },
-    { value: "ND", label: "North Dakota" },
-    { value: "OH", label: "Ohio" },
-    { value: "OK", label: "Oklahoma" },
-    { value: "OR", label: "Oregon" },
-    { value: "PA", label: "Pennsylvania" },
-    { value: "RI", label: "Rhode Island" },
-    { value: "SC", label: "South Carolina" },
-    { value: "SD", label: "South Dakota" },
-    { value: "TN", label: "Tennessee" },
-    { value: "TX", label: "Texas" },
-    { value: "UT", label: "Utah" },
-    { value: "VT", label: "Vermont" },
-    { value: "VA", label: "Virginia" },
-    { value: "WA", label: "Washington" },
-    { value: "WV", label: "West Virginia" },
-    { value: "WI", label: "Wisconsin" },
-    { value: "WY", label: "Wyoming" },
-  ];
+  useEffect(() => {
+    attemptLogin(
+      localStorage["username"],
+      localStorage["password"],
+    ).then((data) => {
+      setFullName(data.fullName);
+      setAddress1(data.address1);
+      setAddress2(data.address2);
+      setCity(data.city);
+      setState(data.state);
+      setZipcode(
+        data.zipcode.toString()
+      );
+    });
+  }, []);
 
   const validateZipcode = (zipcode) => {
-    return /^\d{5}(-\d{4})?$/.test(zipcode);
+    const regex = /^[0-9]+$/; // Numeric
+    return (
+      zipcode.toString().length == 5 ||
+      zipcode.toString().length == 9
+    ) && regex.test(zipcode);
   };
 
   const handleFormSubmit = (e) => {
@@ -115,22 +82,8 @@ const Profile = () => {
       zipcode,
     }).then((data) => {
       if (data.error) alert(data.error);
-      else {
-        console.log(data);
-        setFormSubmitted(true);
-      }
+      else  setFormSubmitted(true);
     });
-  };
-
-  const handleResetForm = () => {
-    setFullName("");
-    setAddress1("");
-    setAddress2("");
-    setCity("");
-    setState("");
-    setZipcode("");
-    setFormSubmitted(false);
-    setErrors({});
   };
 
   return (

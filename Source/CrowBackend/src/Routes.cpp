@@ -44,9 +44,15 @@ namespace Routes {
         }
         return client.toJson();
     }
-    const json predictRateOfFuel(const string& username, const string& password, const double gallonsRequested, const double companyProfitMargin) {
+    const json predictRateOfFuel(
+        const string& username,
+        const string& password,
+        const double gallonsRequested,
+        const double companyProfitMargin,
+        const string& delivery
+    ) {
         auto client = Client(username, password);
-        auto quote = FuelQuote(client, gallonsRequested, companyProfitMargin);
+        auto quote = FuelQuote(client, gallonsRequested, companyProfitMargin, delivery);
         
         return {
             {"client",client.toJson()},

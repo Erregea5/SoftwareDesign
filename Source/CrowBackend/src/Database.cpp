@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Database.h"
 Storage make_Database() {
-    return make_storage("db.sqlite",
+    return make_storage("/home/ubuntu/SoftwareDesign/Source/CrowBackend/db.sqlite",
         make_table("Clients",
             make_column("Client_ID", &Client::id, primary_key().autoincrement()),
             make_column("Username", &Client::username, unique()),
@@ -19,7 +19,7 @@ Storage make_Database() {
         make_table("Fuel_Quotes",
             make_column("Fuel_Quote_ID", &FuelQuote::id, primary_key().autoincrement()),
             make_column("Client_ID", &FuelQuote::clientId),
-            make_column("Date", &FuelQuote::date),
+            make_column("Date", &FuelQuote::deliveryDate),
             make_column("Purchase_Date", &FuelQuote::purchasedDate),
             make_column("Gallons_Requested", &FuelQuote::gallonsRequested),
             make_column("Company_Profit_Margin", &FuelQuote::companyProfitMargin),

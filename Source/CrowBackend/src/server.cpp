@@ -84,17 +84,23 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
             if (auth.empty || auth.password.empty())
                 return crow::response(400, MISSING_CREDENTIALS);
 
-            if (!auth.data.has("gallonsRequested") || !auth.data.has("companyProfitMargin"))
+            if (
+                !auth.data.has("gallonsRequested") ||
+                !auth.data.has("companyProfitMargin") ||
+                !auth.data.has("deliveryDate")
+            )
                 return crow::response(400, MISSING_DATA);
 
             auto gallonsRequested = auth.data["gallonsRequested"];
             auto companyProfitMargin = auth.data["companyProfitMargin"];
+            auto deliveryDate = auth.data["deliveryDate"];
 
             if(gallonsRequested.t() != crow::json::type::Number || companyProfitMargin.t() != crow::json::type::Number)
                 return crow::response(400, INPUT_MISMATCH);
 
             double gallons = gallonsRequested.d();
             double profitMargin = companyProfitMargin.d();
+            string delivery = deliveryDate.s(); 
 
             if (gallons <= 0 || profitMargin <= 0) 
                 return crow::response(400, INPUT_MISMATCH);
@@ -102,7 +108,7 @@ void setupServer(crow::App<crow::CORSHandler>& app) {
             return crow::response(
                 Routes::predictRateOfFuel(
                     auth.username, auth.password,
-                    gallons, profitMargin
+                    gallons, profitMargin, delivery
                 ).dump()
             );
         });

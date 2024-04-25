@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker"; // Import the datepicker component
 import "react-datepicker/dist/react-datepicker.css"; // Import datepicker styles
 import QuoteResult from "./QuoteResult";
 import "../Quote.css";
+import { fullfillPurchase } from "../../../communication"
 
 const FuelQuoteForm = ({
   deliveryAddress,
@@ -14,19 +16,35 @@ const FuelQuoteForm = ({
   const [deliveryDate, setDeliveryDate] = useState(new Date()); // Initialize deliveryDate state with current date
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false); // State to control visibility of the calendar
+  const navigate = useNavigate();
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (gallonsRequested && deliveryDate) {
-      handleSubmit(gallonsRequested, deliveryDate);
-      setFormSubmitted(true);
+
+    if (!gallonsRequested) {
+      alert("Please make sure to input the amount of gallons requested.");
+      return;
+    } else if (deliveryDate && deliveryDate.getTime() < (new Date()).getTime()) {
+      alert("Please make sure the delivery date is in the future.");
+      return;
     }
+    
+    handleSubmit(gallonsRequested, deliveryDate);
+    setFormSubmitted(true);
   };
 
   const handleResetForm = () => {
     setGallonsRequested("");
     setDeliveryDate(new Date()); // Reset deliveryDate to current date
     setFormSubmitted(false);
+  };
+
+  const handleBuyNow = () => {
+    fullfillPurchase().then(() => {
+        alert("Purchase successful! You will now be redirected to your quote history page.");
+        navigate("/history");
+      }
+    )
   };
 
   const toggleCalendar = () => {
@@ -95,8 +113,11 @@ const FuelQuoteForm = ({
       {formSubmitted && (
         <div className="form-result">
           <QuoteResult price={suggestedPrice} numGal={gallonsRequested} />
-          <button className="submit-button" onClick={handleResetForm}>
+          <button className="start-over" onClick={handleResetForm}>
             Start Over
+          </button>
+          <button className="buy-now" onClick={handleBuyNow}>
+            Buy Now
           </button>
         </div>
       )}
