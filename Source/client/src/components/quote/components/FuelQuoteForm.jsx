@@ -28,7 +28,7 @@ const FuelQuoteForm = ({
       alert("Please make sure the delivery date is in the future.");
       return;
     }
-    
+
     handleSubmit(gallonsRequested, deliveryDate);
     setFormSubmitted(true);
   };
@@ -41,9 +41,9 @@ const FuelQuoteForm = ({
 
   const handleBuyNow = () => {
     fullfillPurchase().then(() => {
-        alert("Purchase successful! You will now be redirected to your quote history page.");
-        navigate("/history");
-      }
+      alert("Purchase successful! You will now be redirected to your quote history page.");
+      navigate("/history");
+    }
     )
   };
 
@@ -60,7 +60,7 @@ const FuelQuoteForm = ({
 
   return (
     <>
-      <h1>Fuel Quote Form</h1>
+      <h1 className="fuel-quote-heading">Fuel Quote Form</h1>
       {!showCalendar && !formSubmitted && (
         <form onSubmit={handleFormSubmit} className="form">
           <div className="input-container">

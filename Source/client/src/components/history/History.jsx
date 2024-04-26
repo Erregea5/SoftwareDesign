@@ -137,7 +137,7 @@ const parseFuelQuoteHistory = (data) => {
   return data.map((row, index) => {
     const status =
       (row.purchasedDate !== "null") ? "Fulfilled" :
-        (index == data.length - 1) ? "Pending" : "Expired";
+        (index === data.length - 1) ? "Pending" : "Expired";
     return {
       id: row.id,
       clientLocation: row.clientLocation,
@@ -241,15 +241,15 @@ export default function History() {
   };
 
   const handleBuy = () => {
-    if (!window.confirm("Are you sure you want to purchase the most recent?"))
-      return;
-
     if (!fuelQuoteHistory.length)
       return alert("There are no fuel quotes to purchase.");
 
     const mostRecent = fuelQuoteHistory[fuelQuoteHistory.length - 1];
     if (mostRecent.purchaseDate !== "null")
       return alert("The most recent fuel quote has already been purchased.");
+
+    if (!window.confirm("Are you sure you want to purchase the most recent?"))
+      return;
 
     fullfillPurchase().then(() => {
       alert("Purchase successful!");

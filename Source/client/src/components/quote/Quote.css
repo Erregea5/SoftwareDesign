@@ -23,6 +23,12 @@ body {
   color: white;
 }
 
+.fuel-quote-heading {
+  font-size: 19px;
+  font-weight: 450;
+  margin-bottom: 8px;
+}
+
 .form {
   display: flex;
   flex-direction: column;

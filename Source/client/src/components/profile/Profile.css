@@ -32,6 +32,12 @@ body {
   color: white;
 }
 
+.profile-heading {
+  font-size: 19px;
+  font-weight: 450;
+  margin-bottom: 8px;
+}
+
 .form {
   display: flex;
   flex-direction: column;

@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Database.h"
 
-Client::Client(const string& username, const string& password,bool loggingIn)
-	: username(username), password(password), id(0), clientLocation(0),mostRecentFuelQuoteId(0)
+Client::Client(const string& username, const string& password, bool loggingIn) :
+	username(username), password(password), id(0), clientLocation(0), mostRecentFuelQuoteId(0)
 {
 	auto rows = database.get_all<Client>(where(c(&Client::username) == username));
 	cout<<rows.size()<<username<<endl;
@@ -46,7 +46,6 @@ Client::Client(const string& username, const string& password,bool loggingIn)
 	zipcode = rows[0].zipcode;
 	address1 = rows[0].address1;
 	address2 = rows[0].address2;
-	mostRecentFuelQuoteId = rows[0].mostRecentFuelQuoteId;
 }
 
 const FuelQuote Client::getMostRecentFuelQuote() const

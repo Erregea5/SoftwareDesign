@@ -46,4 +46,9 @@ sqlite_orm=$(getAbsolute "../dependencies/sqlite_orm/include")
 #     done
 # done
 
-echo "$(gcov test.cpp -r -n -o test_coverage.out-server.gcda)"
+# echo "$(gcov test.cpp -r -n -o test_coverage.out-Client.gcda)"
+# echo "$(gcov test.cpp -r -n -o test_coverage.out-Database.gcda)"
+# echo "$(gcov test.cpp -r -n -o test_coverage.out-FuelQuote.gcda)"
+# echo "$(gcov test.cpp -r -n -o test_coverage.out-Routes.gcda)"
+# echo "$(gcov test.cpp -r -n -o test_coverage.out-server.gcda)"
+# echo "$(gcov test.cpp -r -n -o test_coverage.out-test.gcda)"

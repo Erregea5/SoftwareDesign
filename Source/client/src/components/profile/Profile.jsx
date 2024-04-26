@@ -34,8 +34,8 @@ const Profile = () => {
   const validateZipcode = (zipcode) => {
     const regex = /^[0-9]+$/; // Numeric
     return (
-      zipcode.toString().length == 5 ||
-      zipcode.toString().length == 9
+      zipcode.toString().length === 5 ||
+      zipcode.toString().length === 9
     ) && regex.test(zipcode);
   };
 
@@ -82,14 +82,14 @@ const Profile = () => {
       zipcode,
     }).then((data) => {
       if (data.error) alert(data.error);
-      else  setFormSubmitted(true);
+      else setFormSubmitted(true);
     });
   };
 
   return (
     <div className="card-container">
       <div className="card">
-        <h1>Profile Management</h1>
+        <h1 className="profile-heading"> Profile Management</h1>
         {!formSubmitted && (
           <form onSubmit={handleFormSubmit} className="form">
             <div className="input-container">
